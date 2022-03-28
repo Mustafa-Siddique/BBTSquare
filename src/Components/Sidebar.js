@@ -36,10 +36,10 @@ export default function Sidebar(props) {
 
   return (
     <ProSidebar collapsed={isCollapse}>
-      <SidebarHeader>
+      {/* <SidebarHeader>
         <div id="pro-sidebar-brand" onClick={() => setIsCollapse(!isCollapse)}><img src={logo} alt="" /></div>
           <a href="www.boobytrap.live" style={isCollapse === false ? {display:"block"} : {display:"none"}} target="_blank" className="fs-6 text-secondary fw-normal ms-4">Back to Main Site</a>
-      </SidebarHeader>
+      </SidebarHeader> */}
       <SidebarContent>
         <Menu iconShape="square">
           <MenuItem active={window.location.pathname.includes("/safehaven") ? true : false} icon={<FaGem fontSize={20} />}><Link id="pro-sidebar-link" to="/safehaven">SAFE HAVEN</Link></MenuItem>

@@ -13,7 +13,7 @@
 
 /* SIDEBAR SLIDER */
 .pro-sidebar{
-  min-height: 100vh !important;
+  min-height: calc(100vh - 100px) !important;
   position: fixed !important;
 }
 .pro-sidebar-inner .pro-sidebar-layout .active {
