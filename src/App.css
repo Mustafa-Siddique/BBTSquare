@@ -1,5 +1,6 @@
 .App{
-  background-color: #12141E;
+  background-color: #1D1D1D;
+  color: #95a2b3;
 }
 
 /* NAVBAR */
@@ -8,12 +9,13 @@
   justify-content: space-around;
 }
 .navbar-brand img{
-  max-height: 75px;
+  height: 75px;
 }
 
 /* SIDEBAR SLIDER */
 .pro-sidebar{
-  min-height: calc(100vh - 100px) !important;
+  height: calc(100vh - 75px) !important;
+  z-index: 10;
   position: fixed !important;
 }
 .pro-sidebar-inner .pro-sidebar-layout .active {
@@ -63,4 +65,10 @@
 .pro-menu .active #pro-sidebar-link{
   color: #000;
   font-weight: 500;
+}
+
+.allProjects{
+  margin-left: 270px;
+  max-width: 1150px;
+  margin: auto;
 }

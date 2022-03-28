@@ -9,7 +9,7 @@ import {
   SidebarContent,
 } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
-import logo from '../assets/images/logo-text.png'
+// import logo from '../assets/images/logo-text.png'
 import { FaGem, FaList, FaCode, FaSuitcase, FaTelegramPlane, FaTwitter, FaTiktok, FaInstagram } from "react-icons/fa";
 import { SiCrowdsource} from "react-icons/si";
 import { BsFillFileEarmarkLockFill} from "react-icons/bs";
