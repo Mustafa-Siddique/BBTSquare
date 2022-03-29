@@ -4,12 +4,12 @@ import {
   ProSidebar,
   Menu,
   MenuItem,
-  // SidebarHeader,
+  SidebarHeader,
   SidebarFooter,
   SidebarContent,
 } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
-// import logo from '../assets/images/logo-text.png'
+import logo from '../assets/images/logo-text.png'
 import { FaGem, FaList, FaCode, FaSuitcase, FaTelegramPlane, FaTwitter, FaTiktok, FaInstagram } from "react-icons/fa";
 import { SiCrowdsource} from "react-icons/si";
 import { BsFillFileEarmarkLockFill} from "react-icons/bs";
@@ -35,11 +35,11 @@ export default function Sidebar(props) {
     
 
   return (
-    <ProSidebar collapsed={isCollapse}>
-      {/* <SidebarHeader>
+    <ProSidebar collapsed={isCollapse} >
+      <SidebarHeader>
         <div id="pro-sidebar-brand" onClick={() => setIsCollapse(!isCollapse)}><img src={logo} alt="" /></div>
-          <a href="www.boobytrap.live" style={isCollapse === false ? {display:"block"} : {display:"none"}} target="_blank" className="fs-6 text-secondary fw-normal ms-4">Back to Main Site</a>
-      </SidebarHeader> */}
+          {/* <a href="www.boobytrap.live" style={isCollapse === false ? {display:"block"} : {display:"none"}} target="_blank" className="fs-6 text-secondary fw-normal ms-4">Back to Main Site</a> */}
+      </SidebarHeader>
       <SidebarContent>
         <Menu iconShape="square">
           <MenuItem active={window.location.pathname.includes("/safehaven") ? true : false} icon={<FaGem fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/safehaven">SAFE HAVEN</a></MenuItem>

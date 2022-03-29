@@ -11,3 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@media only screen and (max-width: 769px) {
+
+  .globalContainer{
+    margin-left: 0px !important;
+    padding-top: 25px !important;
+  }
+  #pro-sidebar-burger{
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    display: block !important;
+  }
+  .pro-sidebar.collapsed{
+    width: 0px !important;
+    min-width: 0px !important;
+  }
+  .pro-sidebar-layout{
+    padding-bottom: 75px;
+  }  
+}

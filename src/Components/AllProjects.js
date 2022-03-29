@@ -51,7 +51,8 @@ export default function AllProjects() {
   }
 
   return (
-    <div className='allProjects py-5'>
+    <div className='allProjects py-5 px-3'>
+      
       <h2>All Projects</h2>
       <div className="row my-5">
         {arr.map(renderProjects)}

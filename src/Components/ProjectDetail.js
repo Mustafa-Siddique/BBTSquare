@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function ProjectDetail() {
   return (
-    <div className='projectDetails py-5'>
+    <div className='projectDetails py-5 px-3'>
         <h1>Project Name</h1>
         <p>ID: xxxxxxxxxxxxxxxx</p>
         

@@ -17,8 +17,16 @@
   background: linear-gradient(to right, #ffcc00 0%, #ffff00 100%);
   transition-duration: 1s;
 }
-
+.globalContainer{
+  margin-left: 270px;
+  padding-top: 75px;
+}
 /* NAVBAR */
+.navbar{
+  position: fixed !important;
+  width: 100%;
+  height: 75px;
+}
 .navbar-nav{
   min-width: 50%;
   justify-content: space-around;
@@ -26,11 +34,39 @@
 .navbar-brand img{
   height: 75px;
 }
+.navbar-collapse{
+  display: none;
+}
+.navbar-toggler{
+  margin-left: auto;
+}
+
+/* BOTTOM NAVBAR */
+.bottomNav {
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  background-color:#441C72;
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  bottom: 0;
+}
+.bottomNav #mob-link {
+  text-decoration: none;
+  color: #fff;
+}
+.bottomNav button {
+  color: #fff;
+  font-size: 10px;
+}
+.bottomNav button:hover {
+  color: #fff;
+}
 
 /* SIDEBAR SLIDER */
 .pro-sidebar{
-  height: calc(100vh - 75px) !important;
-  z-index: 10;
+  height: 100vh;
+  z-index: 5 !important;
   border-right: 1px solid #555555;
   position: fixed !important;
 }
@@ -112,4 +148,18 @@
 }
 .projectDetails .table td{
   color: #d8d8d8;
+}
+
+/* ASSIGNED */
+.assignedContainer{
+  min-height: 100vh;
+  margin: auto;
+  max-width: 1150px;
+}
+
+/* POST NEW */
+.postContainer{
+  min-height: 100vh;
+  max-width: 1150px;
+  margin: auto;
 }
