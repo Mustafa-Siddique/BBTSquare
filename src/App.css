@@ -2,6 +2,21 @@
   background-color: #1D1D1D;
   color: #95a2b3;
 }
+.btnYellow {
+  background: #ffcc00;
+  padding: 8px 20px;
+  color: #12141d;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  letter-spacing: 2px;
+  transition-duration: 1s;
+}
+.btnYellow:hover {
+  background: linear-gradient(to right, #ffcc00 0%, #ffff00 100%);
+  transition-duration: 1s;
+}
 
 /* NAVBAR */
 .navbar-nav{
@@ -16,6 +31,7 @@
 .pro-sidebar{
   height: calc(100vh - 75px) !important;
   z-index: 10;
+  border-right: 1px solid #555555;
   position: fixed !important;
 }
 .pro-sidebar-inner .pro-sidebar-layout .active {
@@ -67,8 +83,33 @@
   font-weight: 500;
 }
 
+/* ALL PROJECTS */
 .allProjects{
-  margin-left: 270px;
-  max-width: 1150px;
   margin: auto;
+  min-height: 100vh;
+  max-width: 1150px;
+}
+.allProjects .row .card{
+  transition-duration: 0.25s;
+  background-color: #292B33;
+}
+.allProjects .row .card h5{
+  color: #FFCC00;
+}
+.allProjects .row .card:hover{
+  transform: scale(1.01);
+  transition-duration: 0.25s;
+}
+
+/* PROJECT DETAILS */
+.projectDetails{
+  margin: auto;
+  min-height: 100vh;
+  max-width: 1150px;
+}
+.projectDetails .table th{
+  color: #FFCC00;
+}
+.projectDetails .table td{
+  color: #d8d8d8;
 }

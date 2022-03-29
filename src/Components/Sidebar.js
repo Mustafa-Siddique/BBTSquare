@@ -4,7 +4,7 @@ import {
   ProSidebar,
   Menu,
   MenuItem,
-  SidebarHeader,
+  // SidebarHeader,
   SidebarFooter,
   SidebarContent,
 } from "react-pro-sidebar";
@@ -42,18 +42,18 @@ export default function Sidebar(props) {
       </SidebarHeader> */}
       <SidebarContent>
         <Menu iconShape="square">
-          <MenuItem active={window.location.pathname.includes("/safehaven") ? true : false} icon={<FaGem fontSize={20} />}><Link id="pro-sidebar-link" to="/safehaven">SAFE HAVEN</Link></MenuItem>
-          <MenuItem active={window.location.pathname.includes("/boobytrap") ? true : false} icon={<GiWolfTrap fontSize={25} />}><Link id="pro-sidebar-link" to="/boobytrap">BOOBYTRAP</Link></MenuItem>
-          <MenuItem active={window.location.pathname.includes("/ongoing") ? true : false} icon={<FaList />}><Link id="pro-sidebar-link" to="/ongoing">DYOR PROJECTS</Link></MenuItem>
-          <MenuItem active={window.location.pathname.includes("/upcoming") ? true : false} icon={<GiNewShoot fontSize={20} />}><Link id="pro-sidebar-link" to="/upcoming">UPCOMING PROJECTS</Link></MenuItem>
-          <MenuItem active={window.location.pathname.includes("/developers") ? true : false} icon={<FaCode fontSize={20} />}><Link id="pro-sidebar-link" to="/developers">DEVELOPERS</Link></MenuItem>
-          <MenuItem active={window.location.pathname.includes("/influencers") ? true : false} icon={<SiCrowdsource fontSize={20} />}><Link id="pro-sidebar-link" to="/influencers">INFLUENCERS</Link></MenuItem>
-          <MenuItem active={window.location.pathname.includes("/promoters") ? true : false} icon={<GiBugleCall fontSize={20} />}><Link id="pro-sidebar-link" to="/promoters">AMA/CALL CHANNELS</Link></MenuItem>
-          <MenuItem icon={<FaSuitcase fontSize={20} />}><Link id="pro-sidebar-link" to="/comingsoon">OTHER SERVICES</Link></MenuItem>
+          <MenuItem active={window.location.pathname.includes("/safehaven") ? true : false} icon={<FaGem fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/safehaven">SAFE HAVEN</a></MenuItem>
+          <MenuItem active={window.location.pathname.includes("/boobytrap") ? true : false} icon={<GiWolfTrap fontSize={25} />}><a id="pro-sidebar-link" href="https://boobytrap.live/boobytrap">BOOBYTRAP</a></MenuItem>
+          <MenuItem active={window.location.pathname.includes("/ongoing") ? true : false} icon={<FaList />}><a id="pro-sidebar-link" href="https://boobytrap.live/ongoing">DYOR PROJECTS</a></MenuItem>
+          <MenuItem active={window.location.pathname.includes("/upcoming") ? true : false} icon={<GiNewShoot fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/upcoming">UPCOMING PROJECTS</a></MenuItem>
+          <MenuItem active={window.location.pathname.includes("/developers") ? true : false} icon={<FaCode fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/developers">DEVELOPERS</a></MenuItem>
+          <MenuItem active={window.location.pathname.includes("/influencers") ? true : false} icon={<SiCrowdsource fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/influencers">INFLUENCERS</a></MenuItem>
+          <MenuItem active={window.location.pathname.includes("/promoters") ? true : false} icon={<GiBugleCall fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/promoters">AMA/CALL CHANNELS</a></MenuItem>
+          <MenuItem icon={<FaSuitcase fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/comingsoon">OTHER SERVICES</a></MenuItem>
           <MenuItem active={window.location.href.includes("square.boobytrap") ? true : false} icon={<GiPayMoney fontSize={20} />}><Link id="pro-sidebar-link" to="/comingsoon">BBT SQUARE</Link></MenuItem>
-          <MenuItem icon={<BsFillFileEarmarkLockFill fontSize={20} />}><Link id="pro-sidebar-link" to="/comingsoon">INSURANCE DAO</Link></MenuItem>
-          <MenuItem icon={<MdOutlineCastForEducation fontSize={20} />}><Link id="pro-sidebar-link" to="/comingsoon">IEP</Link></MenuItem>
-          <MenuItem active={window.location.pathname.includes("/docs") ? true : false} icon={<HiOutlineDocumentText fontSize={20} />}><Link id="pro-sidebar-link" to="/docs">DOCS</Link></MenuItem>
+          <MenuItem icon={<BsFillFileEarmarkLockFill fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/comingsoon">INSURANCE DAO</a></MenuItem>
+          <MenuItem icon={<MdOutlineCastForEducation fontSize={20} />}><a id="pro-sidebar-link" href="https://boobytrap.live/comingsoon">IEP</a></MenuItem>
+          <MenuItem active={window.location.pathname.includes("/docs") ? true : false} icon={<HiOutlineDocumentText fontSize={20} />}><a id="pro-sidebar-link" href="/docs">DOCS</a></MenuItem>
         </Menu>
         {/* <Menu iconShape="circle">
           <SubMenu
