@@ -6,6 +6,8 @@ import Sidebar from "./Sidebar";
 export default function Navbar() {
 
   const [lg, setlg] = useState(false)
+  
+  const [wallet, setWallet] = useState(false)
 
   return (
       <>
@@ -27,7 +29,7 @@ export default function Navbar() {
               <Link className="nav-link active" to="/post">Post New Project</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link active" to="/">Account</Link>
+              <span className="nav-link active" onClick={() => setWallet(!wallet)}>{wallet === false ? "Account" : "0x000...000"}</span>
             </li>
           </ul>
           {/* <form className="d-flex">
