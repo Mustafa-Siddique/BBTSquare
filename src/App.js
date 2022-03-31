@@ -8,6 +8,7 @@ import ProjectDetail from './Components/ProjectDetail';
 import Bottomnav from './Components/Bottomnav';
 import Posted from './Components/Posted';
 import Assigned from './Components/Assigned';
+import Register from './Components/Register';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <div className='globalContainer'>
       <Routes>
           <Route path='/' element={<AllProjects/>}/>
+          <Route path='/register' element={<Register/>}/>
           <Route path='/assigned' element={<Assigned/>}/>
           <Route path='/post' element={<Posted/>}/>
           <Route path='/detail' element={<ProjectDetail/>}/>

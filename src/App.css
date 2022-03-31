@@ -191,9 +191,16 @@
 .timeline-card-content{
   background-color: #292B33 !important;
 }
-.css-4reink-TimelineCardTitle{
+.card-title{
   color: #fff !important;
 }
 .dummyInterest .card{
   background-color: #292B33;
+}
+
+/* REGISTER YOURSELF */
+.registerContainer{
+  max-width: 1150px;
+  margin: auto;
+  min-height: 100vh;
 }
