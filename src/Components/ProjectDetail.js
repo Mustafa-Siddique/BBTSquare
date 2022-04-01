@@ -44,9 +44,6 @@ export default function ProjectDetail() {
         <Button variant="warning" onClick={() => setModalShow(true)}>
           Show Your Interest
         </Button>
-        <Button className='ms-3' variant="warning" onClick={() => setOffer(true)}>
-          Offer
-        </Button>
         <AssignedModal
           show={modalShow}
           onHide={() => setModalShow(false)}
