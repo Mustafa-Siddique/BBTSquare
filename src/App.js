@@ -10,6 +10,8 @@ import PostNew from './Components/PostNew';
 import Assigned from './Components/Assigned';
 import Register from './Components/Register';
 import Posted from './Components/Posted';
+import AssignedProject from './Components/AssignedProject';
+import MyProjectDetails from './Components/MyProjectDetails';
 
 function App() {
   return (
@@ -20,9 +22,11 @@ function App() {
       <Routes>
           <Route path='/' element={<AllProjects/>}/>
           <Route path='/register' element={<Register/>}/>
-          <Route path='/myassignments' element={<Assigned/>}/>
+          <Route path='myassignments' element={<Assigned/>}/>
+          <Route path='/myassignments/assigned' element={<AssignedProject/>}/>
           <Route path='/createpost' element={<PostNew/>}/>
           <Route path='/myprojects' element={<Posted/>}/>
+          <Route path='/myprojects/project' element={<MyProjectDetails/>}/>
           <Route path='/detail' element={<ProjectDetail/>}/>
       </Routes>
         </div>

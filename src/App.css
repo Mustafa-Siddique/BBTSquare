@@ -205,3 +205,27 @@
   margin: auto;
   max-width: 1150px;
 }
+
+/* ASSIGNED PROJECT DETAILS*/
+.assignedProject{
+  margin: auto;
+  max-width: 1150px;
+}
+.assignedProject .table th{
+  color: #FFCC00;
+}
+.assignedProject .table td{
+  color: #d8d8d8;
+}
+
+/* MY PROJECT DETAILS */
+.MyProjectDetailContainer{
+  margin: auto;
+  max-width: 1150px;
+}
+.MyProjectDetailContainer .table th{
+  color: #FFCC00;
+}
+.MyProjectDetailContainer .table td{
+  color: #d8d8d8;
+}

@@ -1,18 +1,10 @@
 import React, {useState} from 'react'
 import {Button} from 'react-bootstrap'
 import Checkpoints from './Checkpoints';
-import DummyInterest from './DummyInterest';
-import AssignedModal from './Modal';
-import OfferModal from './OfferModal';
 
-export default function ProjectDetail() {
-
-  const [modalShow, setModalShow] = useState(false);
-
-  const [offer, setOffer] = useState(false)
-
+export default function AssignedProject() {
   return (
-    <div className='projectDetails py-5 px-3'>
+    <div className='assignedProject py-5 px-3'>
         <h1 className='text-light'>Project Name</h1>
         <p>ID: xxxxxxxxxxxxxxxx</p>
         
@@ -41,23 +33,13 @@ export default function ProjectDetail() {
             </tr>
           </tbody>
         </table>
-        <Button variant="warning" onClick={() => setModalShow(true)}>
-          Show Your Interest
+        <Button variant="warning">
+          Accept
         </Button>
-        <Button className='ms-3' variant="warning" onClick={() => setOffer(true)}>
-          Offer
-        </Button>
-        <AssignedModal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
-        <OfferModal
-          show={offer}
-          onHide={() => setModalShow(false)}
-          />
-        <div className="container mt-5">
-          <h4 className='text-light'>Recent Interests</h4>
-          <DummyInterest/>
+        <div className="container my-5">
+          <h4 className='text-light'>Milestones:</h4>
+          <span>(This will only be visible to parties contracting)</span>
+          <Checkpoints/>
         </div>
         </div>
     </div>
