@@ -42,7 +42,7 @@ export default function AssignedModal(props) {
 
             <Form.Group className="mb-3" controlId="formBasicPortfolio">
               <Form.Label>Portfolio Link/Previous Work</Form.Label>
-              <Form.Control type="url" placeholder="Experience (in Months)" required />
+              <Form.Control type="url" placeholder="Link to Your Portfolio/Previous Work" required />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicWA">
