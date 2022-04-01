@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import {Link} from 'react-router-dom'
 
 export default function AssignedModal(props) {
   return (
@@ -26,7 +27,7 @@ export default function AssignedModal(props) {
                 required
               />
               <Form.Text className="text-muted">
-                <a style={{color:"#ffcc00"}} href="">Register Yourself</a>
+                <Link style={{color:"#ffcc00"}} to="/register">Register Yourself</Link>
               </Form.Text>
             </Form.Group>
 

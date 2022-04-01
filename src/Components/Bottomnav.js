@@ -29,7 +29,7 @@ export default function Bottomnav() {
             </Link>
           </button>
           <button className="btn">
-            <Link id="mob-link" to="/post">
+            <Link id="mob-link" to="/createpost">
               <img
                 src={stop}
                 style={{ filter: "invert(1)", height: "32px" }}

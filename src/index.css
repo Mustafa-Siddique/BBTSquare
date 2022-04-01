@@ -18,6 +18,10 @@ code {
     margin-left: 0px !important;
     padding-top: 25px !important;
   }
+  .navbar-nav-scroll{
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
   #pro-sidebar-burger{
     position: fixed;
     top: 10px;

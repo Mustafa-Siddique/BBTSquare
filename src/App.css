@@ -40,6 +40,12 @@
 .navbar-toggler{
   margin-left: auto;
 }
+.navbar-nav-scroll {
+  --bs-scroll-height: 250px;
+  background-color: #1D1D1D;
+  box-shadow: 0px 5px 5px #000;
+  overflow: visible !important;
+}
 
 /* BOTTOM NAVBAR */
 .bottomNav {
@@ -125,14 +131,14 @@
   min-height: 100vh;
   max-width: 1150px;
 }
-.allProjects .row .card{
+.allProjects .row .card, .assignedContainer .row .card, .postedContainer .row .card{
   transition-duration: 0.25s;
   background-color: #292B33;
 }
-.allProjects .row .card h5{
+.allProjects .row .card h5, .assignedContainer .row .card h5, .postedContainer .row .card h5{
   color: #FFCC00;
 }
-.allProjects .row .card:hover{
+.allProjects .row .card:hover, .assignedContainer .row .card:hover, .postedContainer .row .card:hover{
   transform: scale(1.01);
   transition-duration: 0.25s;
 }
@@ -179,18 +185,6 @@
 }
 
 /* CHECKPOINTS */
-.css-16u30nb-TimelineControlContainer{
-  display: none !important;
-}
-.css-11ob3u4-Outline{
-  background-color: #441C72 !important;
-}
-.timeline-circle{
-  background-color: #441C72 !important;
-}
-.timeline-card-content{
-  background-color: #292B33 !important;
-}
 .card-title{
   color: #fff !important;
 }
@@ -203,4 +197,11 @@
   max-width: 1150px;
   margin: auto;
   min-height: 100vh;
+}
+
+/* POSTED BY ME */
+.postedContainer{
+  min-height: 100vh;
+  margin: auto;
+  max-width: 1150px;
 }

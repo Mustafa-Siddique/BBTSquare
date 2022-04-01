@@ -12,7 +12,7 @@ export default function Navbar() {
     <>
       <nav
         style={{ zIndex: "1" }}
-        className="navbar navbar-expand-lg navbar-dark"
+        className="navbar navbar-nav-scroll navbar-expand-lg navbar-dark"
       >
         <div className="container-fluid">
           {/* <Link className="navbar-brand" to="/"><img src={logo} alt="" /></Link> */}
@@ -43,7 +43,7 @@ export default function Navbar() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active" to="/post">
+                <Link className="nav-link active" to="/createpost">
                   Post New Project
                 </Link>
               </li>
@@ -63,12 +63,12 @@ export default function Navbar() {
                   </button>
                   <ul className="dropdown-menu">
                     <li>
-                      <Link className="dropdown-item" to="/">
+                      <Link className="dropdown-item" to="/myprojects">
                         Posted by me
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" to="/assigned">
+                      <Link className="dropdown-item" to="/myassignments">
                         Assigned to me
                       </Link>
                     </li>

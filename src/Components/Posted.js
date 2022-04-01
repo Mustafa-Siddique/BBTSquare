@@ -1,88 +1,61 @@
-import React, { useState } from "react";
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Posted() {
+    
+  const arr = [
+    {
+      name: "Project Name1",
+      creator: "Creator",
+      creatorWallet: "0x00000000000000000000",
+      summary: "lorem ipsum",
+      amount: "5",
+    },
+    {
+      name: "Project Name2",
+      creator: "Creator",
+      creatorWallet: "0x00000000000000000000",
+      summary: "lorem ipsum",
+      amount: "5",
+    },
+    {
+      name: "Project Name3",
+      creator: "Creator",
+      creatorWallet: "0x00000000000000000000",
+      summary: "lorem ipsum",
+      amount: "5",
+    },
+    {
+      name: "Project Name4",
+      creator: "Creator",
+      creatorWallet: "0x00000000000000000000",
+      summary: "lorem ipsum",
+      amount: "5",
+    },
+  ]
 
-  // const [checkpointCount, setCheckpointCount] = useState(1)
-
-  // [...Array(checkpointCount)].map((elementInArray, index) => ( 
-  //   <div className="" key={i}> Whatever needs to be rendered repeatedly </div> 
-  //   ) 
-// )
-
-  return (
-    <div className="postContainer py-5 px-3">
-      <h2>Post New Project</h2>
-      <div className="container">
-        <form className="row g-3">
-          <div className="col-12">
-            <label for="inputAddress" className="form-label">
-              Title
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="inputAddress"
-            />
-          </div>
-          <div className="col-md-6">
-            <label for="inputEmail4" className="form-label">
-              Wallet Address:
-            </label>
-            <input type="email" className="form-control" id="inputEmail4" />
-          </div>
-          <div className="col-md-6">
-            <label for="inputPassword4" className="form-label">
-              Contact Info:
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="inputPassword4"
-            />
-          </div>
-          <div className="col-12">
-            <label for="inputAddress2" className="form-label">
-              Short summary:
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="inputAddress2"
-            />
-          </div>
-
-          <div className="col-12">
-            <label for="inputAddress2" className="form-label">
-              Description:
-            </label>
-            <textarea
-              type="text"
-              className="form-control"
-              id="inputAddress2"
-              rows={5}
-            />
-          </div>
-          <h4 className="mt-5 mb-0">Checkpoints</h4>
-          <div className="col-md-8">
-            <label for="inputCity" className="form-label">
-              Description
-            </label>
-            <input type="text" className="form-control" id="inputCity" />
-          </div>
-          <div className="col-md-4">
-            <label for="inputZip" className="form-label">
-              BNB
-            </label>
-            <input type="text" className="form-control" id="inputZip" />
-          </div>
-          <button className="btn btn-outline-warning ms-2" style={{maxWidth:"250px"}}>Add Checkpoints</button>
-          <div className="col-12">
-            <button type="submit" className="btnYellow mt-3">
-              Submit
-            </button>
-          </div>
-        </form>
+  const renderProjects = (arr, index) => {
+    return(
+    <div className="col-md-6 my-2" key={index}>
+      <div className="card" style={{minWidth: "18rem", borderRadius: "5px"}}>
+        <div className="card-body">
+          <h5 className="card-title" style={{maxWidth:"calc(100% - 100px)"}}>{arr.name}</h5>
+          <h5 style={{position:"absolute", right:"25px", top:"15px"}}>10 BNB</h5>
+          <h6 className="card-subtitle mb-2 text-light">Posted by: {arr.creatorWallet}</h6>
+          <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <Link to="/detail" className="btnYellow">Details</Link>
+        </div>
       </div>
     </div>
-  );
+    )
+  }
+
+  return (
+    <div className='postedContainer py-5 px-3'>
+        <h2>Posted by me</h2>
+      <div className="row my-5">
+        {arr.map(renderProjects)}
+      </div>
+    </div>
+  )
 }
