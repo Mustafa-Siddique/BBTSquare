@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/images/logo.png";
+import { getAddress, init } from "../web3/Web3Client";
 import Sidebar from "./Sidebar";
 
 export default function Navbar() {
   const [lg, setlg] = useState(false);
 
-  const [wallet, setWallet] = useState(false);
+  const [address, setAddress] = useState(undefined)
+  
+  useEffect(() => {
+    connectMM()
+  })
+
+  const connectMM = async() => {
+    init();
+    const Address = await getAddress()
+    setAddress(Address)
+    console.log(address)
+  }
 
   return (
     <>
@@ -50,8 +62,8 @@ export default function Navbar() {
 
               <li className="nav-item">
                 <div className="btn-group">
-                  <button type="button" className="btn btn-outline-warning" onClick={() => setWallet(!wallet)}>
-                    {wallet === false ? "Account" : "0x000...000"}
+                  <button type="button" className="btn btn-outline-warning" onClick={() => connectMM()}>
+                    {address ? `${address.slice(0,6)+ "..." + address.slice(-4)}` : "Account"}
                   </button>
                   <button
                     type="button"
