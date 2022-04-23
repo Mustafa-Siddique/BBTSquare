@@ -1,31 +1,58 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button} from 'react-bootstrap'
 import Checkpoints from './Checkpoints';
 import DummyInterest from './DummyInterest';
 import AssignedModal from './Modal';
 import OfferModal from './OfferModal';
+import ProjectDataService from '../services/projects'
+import { useParams } from 'react-router-dom';
 
-export default function ProjectDetail() {
+export default function ProjectDetail(props) {
 
+
+  const initialProjectState = {
+    id: null,
+    title: "",
+    about: "",
+    interests: []
+  };
+
+  const [project, setProject] = useState(initialProjectState)
+
+  const getProject = (id) => {
+    ProjectDataService.get(id)
+    .then(response => {
+      setProject(response.data[0])
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+  console.log(project)
+  const {id} = useParams()
+
+  useEffect (() => {
+    getProject(id)
+  }, [id])
   const [modalShow, setModalShow] = useState(false);
 
   const [offer, setOffer] = useState(false)
 
   return (
     <div className='projectDetails py-5 px-3'>
-        <h1 className='text-light'>Project Name</h1>
-        <p>ID: xxxxxxxxxxxxxxxx</p>
+        <h1 className='text-light'>{project.title}</h1>
+        {/* <p>ID: {id}</p> */}
         
         <div className="container">
         <table className="table" id="skills">
           <tbody>
             <tr>
               <th>Total Reward:</th>
-              <td>10 BNB</td>
+              <td>{project.cost} BNB</td>
             </tr>
             <tr>
               <th>Creator:</th>
-              <td>0x00000000000000000000</td>
+              <td>{project.owner}</td>
             </tr>
             <tr>
               <th>Assigned to:</th>
@@ -33,7 +60,7 @@ export default function ProjectDetail() {
             </tr>
             <tr>
               <th>About:</th>
-              <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum assumenda ex incidunt mollitia! Pariatur, expedita. Enim nostrum quaerat dolore fugiat libero earum temporibus unde optio sapiente pariatur laboriosam, perferendis quia?</td>
+              <td>{project.about}</td>
             </tr>
             <tr>
               <th>Posted On:</th>
@@ -54,7 +81,8 @@ export default function ProjectDetail() {
           />
         <div className="container mt-5">
           <h4 className='text-light'>Recent Interests</h4>
-          <DummyInterest/>
+          {project.interests.length < 1 ? <p>No Interest Yet</p> : <DummyInterest interest={project.interests} />}
+          {/* <DummyInterest interest={project.interests} /> */}
         </div>
         </div>
     </div>

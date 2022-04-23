@@ -27,7 +27,7 @@ function App() {
           <Route path='/createpost' element={<PostNew/>}/>
           <Route path='/myprojects' element={<Posted/>}/>
           <Route path='/myprojects/project' element={<MyProjectDetails/>}/>
-          <Route path='/detail' element={<ProjectDetail/>}/>
+          <Route path='/project/:id' element={<ProjectDetail/>}/>
       </Routes>
         </div>
     </div>
