@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import ProjectDataService from "../services/projects";
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
+import objectHash from "object-hash";
+import { getBBTContract,getAddress,AddProject } from "../web3/Web3Client";
+import Web3 from "web3";
+const web3 = new Web3(window.ethereum)
 
 export default function PostNew() {
   // ALERT
@@ -10,79 +14,144 @@ export default function PostNew() {
   // FORM POST
   const [formData, setFormData] = useState({
     title: "",
-    wallet: "",
+    cost: "",
     contact: "",
     summary: "",
     about: "",
+    checkpoints: [""],
+    rewards: [""],
   });
+
+  const [submitDisabled, setSubmitDisabled] = useState(false);
+  const { title, cost, summary, about, contact, checkpoints, rewards } =
+    formData;
 
   function handleChange(e) {
     const newData = { ...formData };
     newData[e.target.id] = e.target.value;
     setFormData(newData);
   }
-  console.log(formData)
+  // console.log(formData)
 
-  function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     ProjectDataService.createProject(JSON.stringify(formData))
-      .then((response) => {
-        console.log(response);
+      .then(async(response) => {
         setSuccess(true);
+        const dataHash = objectHash(formData);
+        console.log(
+          `Inserted Document ID: ${response.data.insertedId.$oid} & Generated Object Hash is: ${dataHash}`
+        );
+        await AddProject(
+          "0x" + response.data.insertedId.$oid,
+          "0x" + dataHash,
+          rewards.map((reward) => web3.utils.toWei("" + reward, "ether"))
+        )
+        .once("transactionHash", (hash) => {
+            console.log(hash);
+        })
+        .once("receipt", (receipt) => {
+            console.log(receipt);
+            setSubmitDisabled(false);
+        }).catch((error)=>{
+            console.log(error.message)
+            setSubmitDisabled(false);
+        });
       })
       .catch((err) => {
         console.log(err);
         setFailed(true);
       });
   }
-
+  const editCheckpoint = (e, ind) => {
+    let newCheckpoints = [...checkpoints];
+    newCheckpoints[ind] = e.target.value;
+    setFormData({ ...formData, checkpoints: newCheckpoints });
+  };
+  const editReward = (e, ind) => {
+    let newRewards = [...rewards];
+    newRewards[ind] = e.target.value;
+    setFormData({ ...formData, rewards: newRewards });
+  };
+  const addCheckpoint = (e) => {
+    e.preventDefault();
+    setFormData({
+      ...formData,
+      checkpoints: [...checkpoints, ""],
+      rewards: [...rewards, ""],
+    });
+  };
+  const removeCheckpoint = (e, ind) => {
+    e.preventDefault();
+    setFormData({
+      ...formData,
+      checkpoints: checkpoints.filter((_, i) => i !== ind),
+      rewards: rewards.filter((_, i) => i !== ind),
+    });
+  };
 
   return (
     <div className="postContainer py-5 px-3">
       {/* SUCCESS ALERT */}
-      {success && <div className="toast-container" style={{position: "absolute", top: "100px", right: "25px"}}>
+      {success && (
         <div
-          className="toast"
-          role="alert"
-          aria-live="assertive"
-          aria-atomic="true"
+          className="toast-container"
+          style={{ position: "absolute", top: "100px", right: "25px" }}
         >
-          <div className="toast-header alert-success">
-            <FaCheck color="green" />&nbsp;&nbsp;
-            <strong className="me-auto text-success">SUCCESS</strong>
-            <small className="text-muted"></small>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="toast"
-              aria-label="Close"
-            ></button>
+          <div
+            className="toast"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header alert-success">
+              <FaCheck color="green" />
+              &nbsp;&nbsp;
+              <strong className="me-auto text-success">SUCCESS</strong>
+              <small className="text-muted"></small>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="toast-body text-success">
+              Project posted successfully!
+            </div>
           </div>
-          <div className="toast-body text-success">Project posted successfully!</div>
         </div>
-      </div>}
+      )}
       {/* FAILED ALERT */}
-      {failed && <div className="toast-container" style={{position: "absolute", top: "100px", right: "25px"}}>
+      {failed && (
         <div
-          className="toast"
-          role="alert"
-          aria-live="assertive"
-          aria-atomic="true"
+          className="toast-container"
+          style={{ position: "absolute", top: "100px", right: "25px" }}
         >
-          <div className="toast-header alert-success">
-            <FaExclamationTriangle color="red" />&nbsp;&nbsp;
-            <strong className="me-auto text-danger">FAILED</strong>
-            <small className="text-muted"></small>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="toast"
-              aria-label="Close"
-            ></button>
+          <div
+            className="toast"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header alert-success">
+              <FaExclamationTriangle color="red" />
+              &nbsp;&nbsp;
+              <strong className="me-auto text-danger">FAILED</strong>
+              <small className="text-muted"></small>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="toast-body text-danger">
+              Project failed to submit!
+            </div>
           </div>
-          <div className="toast-body text-danger">Project failed to submit!</div>
         </div>
-      </div>}
+      )}
 
       <h2>Post New Project</h2>
       <div className="container">
@@ -101,14 +170,14 @@ export default function PostNew() {
             />
           </div>
           <div className="col-md-6">
-            <label htmlFor="inputWallet" className="form-label">
-              Wallet Address:
+            <label htmlFor="inputCost" className="form-label">
+              Total cost:
             </label>
             <input
-              type="text"
+              type="number"
               className="form-control"
-              id="wallet"
-              value={formData.wallet}
+              id="cost"
+              value={formData.cost}
               onChange={(e) => handleChange(e)}
               required
             />
@@ -154,27 +223,63 @@ export default function PostNew() {
             />
           </div>
           <h4 className="mt-5 mb-0">Checkpoints</h4>
-          <div className="col-md-8">
-            <label htmlFor="inputCity" className="form-label">
-              Description
-            </label>
-            <input type="text" className="form-control" id="inputCity" />
-          </div>
-          <div className="col-md-4">
-            <label htmlFor="inputZip" className="form-label">
-              BNB
-            </label>
-            <input type="text" className="form-control" id="inputZip" />
-          </div>
+          {checkpoints.map((item, ind) => (
+            <div className="row g-3" key={ind}>
+              <div className="col-md-7">
+                <label htmlFor="checkpoints" className="form-label">
+                  Description
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={item}
+                  required
+                  id="checkpoints"
+                  onChange={(e) => {
+                    editCheckpoint(e, ind);
+                  }}
+                />
+              </div>
+              <div className="col-md-4">
+                <label htmlFor="rewards" className="form-label">
+                  BNB
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="rewards"
+                  value={rewards[ind]}
+                  min="0"
+                  step="0.000000000000000001"
+                  required
+                  onChange={(e) => editReward(e, ind)}
+                />
+              </div>
+              {ind !== 0 && (
+                <div className="col-md-1 align-items-end justify-content-center d-flex">
+                  <button
+                    className="btn btn-outline-danger"
+                    value="Delete"
+                    onClick={(e) => {
+                      removeCheckpoint(e, ind);
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
           <button
             className="btn btn-outline-warning ms-2"
             style={{ maxWidth: "250px" }}
+            onClick={(e) => addCheckpoint(e)}
           >
             Add Checkpoints
           </button>
           <div className="col-12">
-            <button type="submit" className="btnYellow mt-3">
-              Submit
+            <button type="submit" className="btnYellow mt-3" disabled={submitDisabled}>
+            {submitDisabled ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>
