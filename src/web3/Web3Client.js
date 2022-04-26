@@ -1,3 +1,4 @@
+import { Alert } from 'bootstrap';
 import Web3 from 'web3';
 import { ABI } from './ContractABI';
 
@@ -18,6 +19,7 @@ export const init = () => {
     return web3
 }
 export const getAddress = async() => {
+    await window.ethereum.enable();
     return await window.ethereum.selectedAddress
 }
 // window.ethereum.on('accountChanged', function(accounts){
@@ -44,8 +46,14 @@ export const getBBTContract = async() => {
 export const AddProject = async(id, hash, point) => {
     try {
         const BBTContract = await getBBTContract();
-        
+        console.log(getAddress(),window.ethereum)
         const data = await BBTContract.methods.addProject(id, hash, point).send({from: await getAddress()});
+        return data
+        // if (data.status === true) {
+        //     alert("Posted successfull on Blockchain.")
+        // } else {
+        //     alert("Failed to Post on Blockchain.")
+        // }
     } catch (error) {
         console.log(error)
     }

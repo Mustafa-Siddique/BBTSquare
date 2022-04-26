@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import ProjectDataService from "../services/projects";
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 import objectHash from "object-hash";
@@ -6,16 +6,23 @@ import { getBBTContract,getAddress,AddProject } from "../web3/Web3Client";
 import Web3 from "web3";
 const web3 = new Web3(window.ethereum)
 
-export default function PostNew() {
+export default function PostNew({add}) {
   // ALERT
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  const [walletAdd, setWalletAdd] = useState(undefined)
+  useEffect(async() => {
+    // const Wallet = await getAddress()
+    // setWalletAdd(Wallet)
+  }, [])
+  console.log(walletAdd)
   // FORM POST
   const [formData, setFormData] = useState({
     title: "",
     cost: "",
     contact: "",
+    wallet: walletAdd,
     summary: "",
     about: "",
     checkpoints: [""],
@@ -37,32 +44,39 @@ export default function PostNew() {
     e.preventDefault();
     ProjectDataService.createProject(JSON.stringify(formData))
       .then(async(response) => {
-        setSuccess(true);
         const dataHash = objectHash(formData);
         console.log(
           `Inserted Document ID: ${response.data.insertedId.$oid} & Generated Object Hash is: ${dataHash}`
         );
-        await AddProject(
+        const data = await AddProject(
           "0x" + response.data.insertedId.$oid,
           "0x" + dataHash,
           rewards.map((reward) => web3.utils.toWei("" + reward, "ether"))
-        )
-        .once("transactionHash", (hash) => {
-            console.log(hash);
-        })
-        .once("receipt", (receipt) => {
-            console.log(receipt);
-            setSubmitDisabled(false);
-        }).catch((error)=>{
-            console.log(error.message)
-            setSubmitDisabled(false);
-        });
+          )
+        if(data.status){
+          setSuccess(true);
+        }
+        else{
+          setFailed(true);
+        }
+        //   .once("transactionHash", (hash) => {
+        //     setSuccess(true);
+        //     console.log(hash);
+        // })
+        // .once("receipt", (receipt) => {
+        //     console.log(receipt);
+        //     setSubmitDisabled(true);
+        // }).catch((error)=>{
+        //     console.log(error.message)
+        //     setSubmitDisabled(false);
+        // });
       })
       .catch((err) => {
         console.log(err);
         setFailed(true);
       });
   }
+  console.log(success, failed)
   const editCheckpoint = (e, ind) => {
     let newCheckpoints = [...checkpoints];
     newCheckpoints[ind] = e.target.value;
@@ -114,6 +128,7 @@ export default function PostNew() {
                 className="btn-close"
                 data-bs-dismiss="toast"
                 aria-label="Close"
+                onClick={() => setSuccess(!success)}
               ></button>
             </div>
             <div className="toast-body text-success">
@@ -144,6 +159,7 @@ export default function PostNew() {
                 className="btn-close"
                 data-bs-dismiss="toast"
                 aria-label="Close"
+                onClick={setFailed(!failed)}
               ></button>
             </div>
             <div className="toast-body text-danger">
@@ -278,9 +294,11 @@ export default function PostNew() {
             Add Checkpoints
           </button>
           <div className="col-12">
-            <button type="submit" className="btnYellow mt-3" disabled={submitDisabled}>
+            {add !== undefined ? <button type="submit" className="btnYellow mt-3" disabled={submitDisabled}>
             {submitDisabled ? "Submitting..." : "Submit"}
-            </button>
+            </button> : <button className="btnYellow mt-3">
+              Wallet not connected
+            </button>}
           </div>
         </form>
       </div>

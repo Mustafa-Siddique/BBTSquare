@@ -12,11 +12,31 @@ import Register from './Components/Register';
 import Posted from './Components/Posted';
 import AssignedProject from './Components/AssignedProject';
 import MyProjectDetails from './Components/MyProjectDetails';
+import { getAddress, init } from "./web3/Web3Client";
+import { useEffect, useState, useLayoutEffect } from 'react';
 
 function App() {
+  const [address, setAddress] = useState()
+  useLayoutEffect(() => {
+    connectMM()
+  }, [])
+
+  const connectMM = async() => {
+try{
+  // init();
+  await window.ethereum.enable();
+  const Address = await window.ethereum.selectedAddress
+  setAddress(Address)
+  console.log("address",Address)
+}
+catch(e){
+  console.log(e)
+}
+  }
+  
   return (
     <div className="App">
-      <Navbar/>
+      <Navbar connect={connectMM} add={address}/>
       <Bottomnav/>
         <div className='globalContainer'>
       <Routes>
@@ -24,7 +44,7 @@ function App() {
           <Route path='/register' element={<Register/>}/>
           <Route path='myassignments' element={<Assigned/>}/>
           <Route path='/myassignments/assigned' element={<AssignedProject/>}/>
-          <Route path='/createpost' element={<PostNew/>}/>
+          <Route path='/createpost' element={<PostNew  add={address}/>}/>
           <Route path='/myprojects' element={<Posted/>}/>
           <Route path='/myprojects/project' element={<MyProjectDetails/>}/>
           <Route path='/project/:id' element={<ProjectDetail/>}/>
