@@ -44,9 +44,9 @@ catch(e){
           <Route path='/register' element={<Register/>}/>
           <Route path='myassignments' element={<Assigned/>}/>
           <Route path='/myassignments/assigned' element={<AssignedProject/>}/>
-          <Route path='/createpost' element={<PostNew  add={address}/>}/>
-          <Route path='/myprojects' element={<Posted/>}/>
-          <Route path='/myprojects/project' element={<MyProjectDetails/>}/>
+          <Route path='/createpost' element={<PostNew add={address}/>}/>
+          <Route path='/myprojects' element={<Posted add={address}/>}/>
+          <Route path='/myprojects/:id' element={<MyProjectDetails add={address}/>}/>
           <Route path='/project/:id' element={<ProjectDetail/>}/>
       </Routes>
         </div>

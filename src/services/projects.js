@@ -13,6 +13,10 @@ class ProjectDataService{
         return httpCommon.post('/createproject', formData);
     }
 
+    createInterest(interestData){
+        return httpCommon.post('/createinterest', interestData);
+    }
+
     deleteInterest(id){
         return httpCommon.delete(`/interest?id=${id}`);
     }

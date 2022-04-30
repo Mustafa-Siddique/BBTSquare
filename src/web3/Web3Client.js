@@ -36,7 +36,7 @@ export const getContracts = (abi, address) => {
 
 export const getBBTContract = async() => {
     try {
-        const BBTContract = await  getContracts(ABI, "0xdd4092f2B7F0f2E637F31b20D813BfF1FCa3a442")
+        const BBTContract = await  getContracts(ABI, "0xeF628F2E8013b32E1A3D4bFB3Aa10e940CAD4b2D")
         console.log(BBTContract)
         return BBTContract
     } catch (error) {
@@ -54,6 +54,25 @@ export const AddProject = async(id, hash, point) => {
         // } else {
         //     alert("Failed to Post on Blockchain.")
         // }
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const verifyProject = async (_id) => {
+    try {
+        const BBTContract = await getBBTContract();
+        const data = await BBTContract.methods.getProject(_id).call()
+        return data
+    } catch (err) {
+        console.log(err)
+    }
+}
+export const offerProject = async(cost, _id, assignee, instruction) => {
+    try {
+        const BBTContract = await getBBTContract();
+        console.log(getAddress(),window.ethereum)
+        const data = await BBTContract.methods.offer(cost, _id, assignee, instruction).send({from: await getAddress()});
+        return data
     } catch (error) {
         console.log(error)
     }

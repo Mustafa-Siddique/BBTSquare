@@ -11,18 +11,12 @@ export default function PostNew({add}) {
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
 
-  const [walletAdd, setWalletAdd] = useState(undefined)
-  useEffect(async() => {
-    // const Wallet = await getAddress()
-    // setWalletAdd(Wallet)
-  }, [])
-  console.log(walletAdd)
   // FORM POST
   const [formData, setFormData] = useState({
     title: "",
     cost: "",
     contact: "",
-    wallet: walletAdd,
+    wallet: add,
     summary: "",
     about: "",
     checkpoints: [""],

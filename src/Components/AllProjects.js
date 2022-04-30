@@ -19,7 +19,7 @@ export default function AllProjects() {
       console.log(err);
     });
   }
-  console.log()
+  console.log(projects)
   // const refreshList = () => {
   //   retrieveProjects();
   // }

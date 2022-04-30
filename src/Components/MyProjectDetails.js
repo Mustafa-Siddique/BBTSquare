@@ -1,27 +1,94 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import Checkpoints from "./Checkpoints";
 import Form from "react-bootstrap/Form";
+import { useParams } from "react-router-dom";
+import ProjectDataService from "../services/projects";
+import Moment from "react-moment";
+import Web3 from "web3";
+import { offerProject } from "../web3/Web3Client";
+const web3 = new Web3(window.ethereum);
 
-export default function MyProjectDetails() {
+export default function MyProjectDetails({ add }) {
   const [modalOffer, setModalOffer] = useState(false);
   const [modalRevoke, setModalRevoke] = useState(false);
 
+  const initialProjectState = {
+    id: null,
+    title: "",
+    about: "",
+    interests: [],
+    date: undefined,
+  };
+  const [project, setProject] = useState(initialProjectState);
+
+  const getProject = (id) => {
+    ProjectDataService.get(id)
+      .then((response) => {
+        setProject(response.data[0]);
+        console.log(project);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const { id } = useParams();
+
+  useEffect(() => {
+    getProject(id);
+  }, [id]);
+
+  // ALERTS
+  const [success, setSuccess] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  // OFFER FORM
+  const _cost = project.cost
+  console.log(_cost)
+  const [offerData, setOfferData] = useState({
+    cost: _cost,
+    _id: id,
+    assigneeWallet: "",
+    instruction: "",
+  });
+  const { cost, _id, assigneeWallet, instruction } = offerData;
+  function handleOfferChange(e) {
+    const newData = { ...offerData };
+    newData[e.target.id] = e.target.value;
+    setOfferData(newData);
+  }
+  console.log(offerData)
+  
+  const handleOfferSubmit = async (e) => {
+    e.preventDefault();
+    const data = await offerProject(
+      offerData.cost,
+      "0x" + id,
+      offerData.wallet,
+      offerData.instruction
+    );
+    if (data.status) {
+      setSuccess(true);
+    } else {
+      setFailed(true);
+    }
+  };
+
   return (
     <div className="MyProjectDetailContainer py-5 px-3">
-      <h1 className="text-light">Project Name</h1>
-      <p>ID: xxxxxxxxxxxxxxxx</p>
+      <h1 className="text-light">{project.title}</h1>
+      <p>ID: {"0x" + id}</p>
 
       <div className="container">
         <table className="table" id="skills">
           <tbody>
             <tr>
               <th>Total Reward:</th>
-              <td>10 BNB</td>
+              <td>{project.cost} BNB</td>
             </tr>
             <tr>
               <th>Creator:</th>
-              <td>0x00000000000000000000</td>
+              <td>{project.wallet}</td>
             </tr>
             <tr>
               <th>Assigned to:</th>
@@ -29,21 +96,26 @@ export default function MyProjectDetails() {
             </tr>
             <tr>
               <th>About:</th>
-              <td>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-                assumenda ex incidunt mollitia! Pariatur, expedita. Enim nostrum
-                quaerat dolore fugiat libero earum temporibus unde optio
-                sapiente pariatur laboriosam, perferendis quia?
-              </td>
+              <td>{project.about}</td>
             </tr>
             <tr>
               <th>Posted On:</th>
-              <td>Jan 30, 2022, 11:04 AM UTC</td>
+              <td>
+                {project.date !== undefined ? (
+                  <Moment unix>{project.date.$date.$numberLong / 1000}</Moment>
+                ) : (
+                  "Loading..."
+                )}
+              </td>
             </tr>
           </tbody>
         </table>
 
-        <Button variant="warning" onClick={() => setModalOffer(true)}>
+        <Button
+          variant="warning"
+          disabled={add !== undefined ? false : true}
+          onClick={() => setModalOffer(true)}
+        >
           Offer Project
         </Button>
         {/* OFFER MODAL */}
@@ -61,20 +133,24 @@ export default function MyProjectDetails() {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group className="mb-3" controlId="formBasicWA">
+              <Form.Group className="mb-3" controlId="assigneeWallet">
                 <Form.Label>Wallet Address</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Wallet Address"
+                  value={offerData.assigneeWallet}
+                  onChange={(e) => handleOfferChange(e)}
                   required
                 />
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formBasicInstruction">
+              <Form.Group className="mb-3" controlId="instruction">
                 <Form.Label>Instructions</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Instructions for Service Provider"
+                  value={offerData.instruction}
+                  onChange={(e) => handleOfferChange(e)}
                   required
                 />
               </Form.Group>
@@ -94,9 +170,18 @@ export default function MyProjectDetails() {
         <Button
           variant="warning"
           className="ms-3"
+          disabled={add !== undefined ? false : true}
           onClick={() => setModalRevoke(true)}
         >
           Revoke
+        </Button>
+        <Button
+          variant="outline-danger"
+          className="ms-3"
+          disabled={add !== undefined ? false : true}
+          onClick={() => setModalRevoke(true)}
+        >
+          Delete Project
         </Button>
         {/* REVOKE PROJECT */}
         {/* <Modal
