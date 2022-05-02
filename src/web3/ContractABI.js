@@ -1,5 +1,4 @@
 export const ABI = [
-  [
     {
       anonymous: false,
       inputs: [
@@ -373,5 +372,4 @@ export const ABI = [
       stateMutability: "nonpayable",
       type: "function",
     },
-  ],
-];
+  ]
