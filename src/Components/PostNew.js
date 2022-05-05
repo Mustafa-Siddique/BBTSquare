@@ -2,11 +2,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import ProjectDataService from "../services/projects";
 import { FaCheck, FaExclamationTriangle } from "react-icons/fa";
 import objectHash from "object-hash";
-import { getBBTContract,getAddress,AddProject } from "../web3/Web3Client";
+import { getBBTContract, getAddress, AddProject } from "../web3/Web3Client";
 import Web3 from "web3";
-const web3 = new Web3(window.ethereum)
+const web3 = new Web3(window.ethereum);
 
-export default function PostNew({add}) {
+export default function PostNew({ add }) {
   // ALERT
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -37,7 +37,8 @@ export default function PostNew({add}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     ProjectDataService.createProject(JSON.stringify(formData))
-      .then(async(response) => {
+      .then(async (response) => {
+        setSubmitDisabled(true);
         const dataHash = objectHash(formData);
         console.log(
           `Inserted Document ID: ${response.data.insertedId.$oid} & Generated Object Hash is: ${dataHash}`
@@ -46,11 +47,11 @@ export default function PostNew({add}) {
           "0x" + response.data.insertedId.$oid,
           "0x" + dataHash,
           rewards.map((reward) => web3.utils.toWei("" + reward, "ether"))
-          )
-        if(data.status){
+        );
+        if (data.status) {
           setSuccess(true);
-        }
-        else{
+          setSubmitDisabled(true);
+        } else {
           setFailed(true);
         }
         //   .once("transactionHash", (hash) => {
@@ -69,8 +70,8 @@ export default function PostNew({add}) {
         console.log(err);
         setFailed(true);
       });
-  }
-  console.log(success, failed)
+  };
+  console.log(success, failed);
   const editCheckpoint = (e, ind) => {
     let newCheckpoints = [...checkpoints];
     newCheckpoints[ind] = e.target.value;
@@ -288,11 +289,17 @@ export default function PostNew({add}) {
             Add Checkpoints
           </button>
           <div className="col-12">
-            {add !== undefined ? <button type="submit" className="btnYellow mt-3" disabled={submitDisabled}>
-            {submitDisabled ? "Submitting..." : "Submit"}
-            </button> : <button className="btnYellow mt-3">
-              Wallet not connected
-            </button>}
+            {add !== undefined ? (
+              <button
+                type="submit"
+                className="btnYellow mt-3"
+                disabled={submitDisabled}
+              >
+                {submitDisabled ? "Submitting..." : "Submit"}
+              </button>
+            ) : (
+              <button className="btnYellow mt-3">Wallet not connected</button>
+            )}
           </div>
         </form>
       </div>

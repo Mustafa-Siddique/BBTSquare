@@ -38,9 +38,13 @@ export default function ProjectDetail(props) {
     verifyData(id);
   }, [id]);
 
+  const [blockchainData, setBlockchainData] = useState({})
   const verifyData = async (id) => {
     const blockchainData = await verifyProject("0x"+id);
+    setBlockchainData(blockchainData)
   }
+  objectHash(project)
+  console.log(blockchainData)
 
   const [modalShow, setModalShow] = useState(false);
   const [offer, setOffer] = useState(false);
@@ -72,8 +76,8 @@ export default function ProjectDetail(props) {
             <tr>
               <th>Posted On:</th>
               <td>
-                {project.date !== undefined ? (
-                  <Moment unix>{(project.date.$date.$numberLong)/1000}</Moment>
+                {blockchainData[5] !== undefined ? (
+                  <Moment unix>{blockchainData[5]}</Moment>
                 ) : (
                   "Loading..."
                 )}
