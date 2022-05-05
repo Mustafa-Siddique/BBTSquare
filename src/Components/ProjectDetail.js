@@ -21,11 +21,12 @@ export default function ProjectDetail(props) {
   };
 
   const [project, setProject] = useState(initialProjectState);
+  const [dataHash, setDataHash] = useState({});
   const getProject = (id) => {
     ProjectDataService.get(id)
       .then((response) => {
         setProject(response.data[0]);
-        // console.log(project);
+        setDataHash(objectHash({ "title": project.title,  "wallet": project.wallet,  "contact": project.contact,  "cost": project.cost,  "summary": project.summary,  "about": project.about,  "checkpoints": project.checkpoints,  "rewards": project.rewards}))
       })
       .catch((err) => {
         console.log(err);
@@ -40,10 +41,9 @@ export default function ProjectDetail(props) {
 
   const [blockchainData, setBlockchainData] = useState({})
   const verifyData = async (id) => {
-    const blockchainData = await verifyProject("0x"+id);
+    const blockchainData = await verifyProject("0x" + id);
     setBlockchainData(blockchainData)
   }
-  objectHash(project)
   console.log(blockchainData)
 
   const [modalShow, setModalShow] = useState(false);
@@ -51,8 +51,9 @@ export default function ProjectDetail(props) {
   return (
     <div className="projectDetails py-5 px-3">
       <h1 className="text-light">{project.title}</h1>
+      <p>0x{dataHash}</p>
       <p>ID: {"0x" + id}</p>
-      
+
 
       <div className="container">
         <table className="table" id="skills">
@@ -63,7 +64,10 @@ export default function ProjectDetail(props) {
             </tr>
             <tr>
               <th>Creator:</th>
-              <td>{project.wallet}</td>
+              <td>{blockchainData[0] !== undefined ?
+                blockchainData[0] : (
+                "Loading..."
+              )}</td>
             </tr>
             <tr>
               <th>Assigned to:</th>
