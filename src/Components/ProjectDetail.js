@@ -8,6 +8,7 @@ import ProjectDataService from "../services/projects";
 import { useParams } from "react-router-dom";
 import objectHash from "object-hash";
 import Moment from "react-moment";
+import { FaCheckCircle } from "react-icons/fa";
 import { verifyProject } from "../web3/Web3Client";
 // Moment.globalFormat = 'DD MMM YYYY';
 
@@ -21,12 +22,23 @@ export default function ProjectDetail(props) {
   };
 
   const [project, setProject] = useState(initialProjectState);
-  const [dataHash, setDataHash] = useState({});
+  const [dataHash, setDataHash] = useState();
   const getProject = (id) => {
     ProjectDataService.get(id)
       .then((response) => {
         setProject(response.data[0]);
-        setDataHash(objectHash({ "title": project.title,  "wallet": project.wallet,  "contact": project.contact,  "cost": project.cost,  "summary": project.summary,  "about": project.about,  "checkpoints": project.checkpoints,  "rewards": project.rewards}))
+        setDataHash(
+          objectHash({
+            title: response.data[0].title,
+            wallet: response.data[0].wallet,
+            contact: response.data[0].contact,
+            cost: response.data[0].cost,
+            summary: response.data[0].summary,
+            about: response.data[0].about,
+            checkpoints: response.data[0].checkpoints,
+            rewards: response.data[0].rewards,
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -34,26 +46,49 @@ export default function ProjectDetail(props) {
   };
   const { id } = useParams();
 
-  useEffect(() => {
+  useEffect(async () => {
     getProject(id);
-    verifyData(id);
+    await verifyData(id);
   }, [id]);
 
-  const [blockchainData, setBlockchainData] = useState({})
+  const [blockchainData, setBlockchainData] = useState();
+
   const verifyData = async (id) => {
     const blockchainData = await verifyProject("0x" + id);
-    setBlockchainData(blockchainData)
-  }
-  console.log(blockchainData)
+    setBlockchainData(blockchainData);
+  };
+
+  console.log("data", blockchainData, dataHash);
 
   const [modalShow, setModalShow] = useState(false);
   const [offer, setOffer] = useState(false);
+
   return (
     <div className="projectDetails py-5 px-3">
       <h1 className="text-light">{project.title}</h1>
-      <p>0x{dataHash}</p>
+      {blockchainData && dataHash ? (
+        <p>
+          {" "}
+          {"0x" + dataHash === blockchainData[2] ? (
+            <span className="text-success">
+              <FaCheckCircle size={20} /> 0x{dataHash}
+            </span>
+          ) : (
+            <span className="text-danger">
+              Hash does not match.
+              <br />
+              Data has been possibly tempered with or deleted by someone. Only
+              the created by address, assignee addresses, posted on date and
+              time, checkpoint rewards and checkpoints completion status are
+              secure and trustable. If you posted this project then delete it to
+              get any remaining reward held in the smart contract back.
+            </span>
+          )}
+        </p>
+      ) : (
+        ""
+      )}
       <p>ID: {"0x" + id}</p>
-
 
       <div className="container">
         <table className="table" id="skills">
@@ -64,10 +99,11 @@ export default function ProjectDetail(props) {
             </tr>
             <tr>
               <th>Creator:</th>
-              <td>{blockchainData[0] !== undefined ?
-                blockchainData[0] : (
-                "Loading..."
-              )}</td>
+              <td>
+                {blockchainData && blockchainData[0] !== undefined
+                  ? blockchainData[0]
+                  : "Loading..."}
+              </td>
             </tr>
             <tr>
               <th>Assigned to:</th>
@@ -80,7 +116,7 @@ export default function ProjectDetail(props) {
             <tr>
               <th>Posted On:</th>
               <td>
-                {blockchainData[5] !== undefined ? (
+                {blockchainData && blockchainData[5] !== undefined ? (
                   <Moment unix>{blockchainData[5]}</Moment>
                 ) : (
                   "Loading..."

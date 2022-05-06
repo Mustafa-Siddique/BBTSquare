@@ -6,7 +6,10 @@ import { useParams } from "react-router-dom";
 import ProjectDataService from "../services/projects";
 import Moment from "react-moment";
 import Web3 from "web3";
+import objectHash from "object-hash";
 import { offerProject } from "../web3/Web3Client";
+import { verifyProject } from "../web3/Web3Client";
+import { FaCheckCircle } from "react-icons/fa";
 const web3 = new Web3(window.ethereum);
 
 export default function MyProjectDetails({ add }) {
@@ -21,12 +24,24 @@ export default function MyProjectDetails({ add }) {
     date: undefined,
   };
   const [project, setProject] = useState(initialProjectState);
+  const [dataHash, setDataHash] = useState();
 
   const getProject = (id) => {
     ProjectDataService.get(id)
       .then((response) => {
         setProject(response.data[0]);
-        console.log(project);
+        setDataHash(
+          objectHash({
+            title: response.data[0].title,
+            wallet: response.data[0].wallet,
+            contact: response.data[0].contact,
+            cost: response.data[0].cost,
+            summary: response.data[0].summary,
+            about: response.data[0].about,
+            checkpoints: response.data[0].checkpoints,
+            rewards: response.data[0].rewards,
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -34,38 +49,44 @@ export default function MyProjectDetails({ add }) {
   };
   const { id } = useParams();
 
-  useEffect(() => {
+  useEffect(async () => {
     getProject(id);
+    await verifyData(id);
   }, [id]);
+
+  const [blockchainData, setBlockchainData] = useState();
+
+  const verifyData = async (id) => {
+    const blockchainData = await verifyProject("0x" + id);
+    setBlockchainData(blockchainData);
+  };
+
+  console.log("data", blockchainData, dataHash);
 
   // ALERTS
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
 
   // OFFER FORM
-  const _cost = project.cost
-  console.log(_cost)
   const [offerData, setOfferData] = useState({
-    cost: _cost,
-    _id: id,
+    cost: "",
+    _id: "0x"+id,
     assigneeWallet: "",
-    instruction: "",
   });
-  const { cost, _id, assigneeWallet, instruction } = offerData;
+  const { cost, _id, assigneeWallet } = offerData;
   function handleOfferChange(e) {
     const newData = { ...offerData };
     newData[e.target.id] = e.target.value;
     setOfferData(newData);
   }
-  console.log(offerData)
-  
+  console.log(offerData);
+
   const handleOfferSubmit = async (e) => {
     e.preventDefault();
     const data = await offerProject(
       offerData.cost,
-      "0x" + id,
-      offerData.wallet,
-      offerData.instruction
+      offerData._id,
+      offerData.wallet
     );
     if (data.status) {
       setSuccess(true);
@@ -77,6 +98,28 @@ export default function MyProjectDetails({ add }) {
   return (
     <div className="MyProjectDetailContainer py-5 px-3">
       <h1 className="text-light">{project.title}</h1>
+      {blockchainData && dataHash ? (
+        <p>
+          {" "}
+          {"0x" + dataHash === blockchainData[2] ? (
+            <span className="text-success">
+              <FaCheckCircle size={20} /> 0x{dataHash}
+            </span>
+          ) : (
+            <span className="text-danger">
+              Hash does not match.
+              <br />
+              Data has been possibly tempered with or deleted by someone. Only
+              the created by address, assignee addresses, posted on date and
+              time, checkpoint rewards and checkpoints completion status are
+              secure and trustable. If you posted this project then delete it to
+              get any remaining reward held in the smart contract back.
+            </span>
+          )}
+        </p>
+      ) : (
+        ""
+      )}
       <p>ID: {"0x" + id}</p>
 
       <div className="container">
@@ -88,7 +131,11 @@ export default function MyProjectDetails({ add }) {
             </tr>
             <tr>
               <th>Creator:</th>
-              <td>{project.wallet}</td>
+              <td>
+                {blockchainData && blockchainData[0] !== undefined
+                  ? blockchainData[0]
+                  : "Loading..."}
+              </td>
             </tr>
             <tr>
               <th>Assigned to:</th>
@@ -101,8 +148,8 @@ export default function MyProjectDetails({ add }) {
             <tr>
               <th>Posted On:</th>
               <td>
-                {project.date !== undefined ? (
-                  <Moment unix>{project.date.$date.$numberLong / 1000}</Moment>
+                {blockchainData && blockchainData[5] !== undefined ? (
+                  <Moment unix>{blockchainData[5]}</Moment>
                 ) : (
                   "Loading..."
                 )}
@@ -132,7 +179,18 @@ export default function MyProjectDetails({ add }) {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={(e) => handleOfferSubmit(e)}>
+              <Form.Group className="mb-3" controlId="cost">
+                <Form.Label>Cost</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Project Total Cost"
+                  value={offerData.cost}
+                  onChange={(e) => handleOfferChange(e)}
+                  required
+                />
+              </Form.Group>
+
               <Form.Group className="mb-3" controlId="assigneeWallet">
                 <Form.Label>Wallet Address</Form.Label>
                 <Form.Control
@@ -144,7 +202,7 @@ export default function MyProjectDetails({ add }) {
                 />
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="instruction">
+              {/* <Form.Group className="mb-3" controlId="instruction">
                 <Form.Label>Instructions</Form.Label>
                 <Form.Control
                   type="text"
@@ -153,7 +211,7 @@ export default function MyProjectDetails({ add }) {
                   onChange={(e) => handleOfferChange(e)}
                   required
                 />
-              </Form.Group>
+              </Form.Group> */}
 
               <Button variant="warning" type="submit">
                 Send Offer

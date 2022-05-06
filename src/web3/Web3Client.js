@@ -67,11 +67,11 @@ export const verifyProject = async (_id) => {
         console.log(err)
     }
 }
-export const offerProject = async(cost, _id, assignee, instruction) => {
+export const offerProject = async (cost, _id, assignee) => {
     try {
         const BBTContract = await getBBTContract();
         console.log(getAddress(),window.ethereum)
-        const data = await BBTContract.methods.offer(cost, _id, assignee, instruction).send({from: await getAddress()});
+        const data = await BBTContract.methods.offer(cost, _id, assignee).send({from: await getAddress()});
         return data
     } catch (error) {
         console.log(error)
