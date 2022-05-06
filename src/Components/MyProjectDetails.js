@@ -72,8 +72,9 @@ export default function MyProjectDetails({ add }) {
     cost: "",
     _id: "0x"+id,
     assigneeWallet: "",
+    instructions: ""
   });
-  const { cost, _id, assigneeWallet } = offerData;
+  const { cost, _id, assigneeWallet, instructions } = offerData;
   function handleOfferChange(e) {
     const newData = { ...offerData };
     newData[e.target.id] = e.target.value;
@@ -86,7 +87,8 @@ export default function MyProjectDetails({ add }) {
     const data = await offerProject(
       offerData.cost,
       offerData._id,
-      offerData.wallet
+      offerData.assigneeWallet,
+      offerData.instructions
     );
     if (data.status) {
       setSuccess(true);
@@ -139,7 +141,7 @@ export default function MyProjectDetails({ add }) {
             </tr>
             <tr>
               <th>Assigned to:</th>
-              <td>Unassigned</td>
+              <td>Undefined</td>
             </tr>
             <tr>
               <th>About:</th>
@@ -202,16 +204,16 @@ export default function MyProjectDetails({ add }) {
                 />
               </Form.Group>
 
-              {/* <Form.Group className="mb-3" controlId="instruction">
+              <Form.Group className="mb-3" controlId="instructions">
                 <Form.Label>Instructions</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Instructions for Service Provider"
-                  value={offerData.instruction}
+                  value={offerData.instructions}
                   onChange={(e) => handleOfferChange(e)}
                   required
                 />
-              </Form.Group> */}
+              </Form.Group>
 
               <Button variant="warning" type="submit">
                 Send Offer
