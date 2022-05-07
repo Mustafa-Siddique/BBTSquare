@@ -97,6 +97,12 @@ export default function MyProjectDetails({ add }) {
     }
   };
 
+  // DELETE PROJECT
+  const [showDel, setShowDel] = useState(false);
+
+  const handleDelClose = () => setShowDel(false);
+  const handleDelShow = () => setShowDel(true);
+
   return (
     <div className="MyProjectDetailContainer py-5 px-3">
       <h1 className="text-light">{project.title}</h1>
@@ -235,14 +241,30 @@ export default function MyProjectDetails({ add }) {
         >
           Revoke
         </Button>
+
+        {/* DELETE PROJECT */}
         <Button
           variant="outline-danger"
           className="ms-3"
           disabled={add !== undefined ? false : true}
-          onClick={() => setModalRevoke(true)}
+          onClick={handleDelShow}
         >
           Delete Project
         </Button>
+        <Modal show={showDel} onHide={handleDelClose}>
+        {/* <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header> */}
+        <Modal.Body className="text-light">Do you really wish to delete this project?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDelClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleDelClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
         {/* REVOKE PROJECT */}
         {/* <Modal
           show={modalRevoke}

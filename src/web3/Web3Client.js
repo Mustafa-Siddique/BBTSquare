@@ -36,7 +36,7 @@ export const getContracts = (abi, address) => {
 
 export const getBBTContract = async() => {
     try {
-        const BBTContract = await  getContracts(ABI, "0xeF628F2E8013b32E1A3D4bFB3Aa10e940CAD4b2D")
+        const BBTContract = await  getContracts(ABI, "0xC39BE040Fe65b71070A306AAaFEb21d288AE4BE0")
         console.log(BBTContract)
         return BBTContract
     } catch (error) {
