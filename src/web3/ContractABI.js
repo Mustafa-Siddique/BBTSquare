@@ -205,6 +205,13 @@ export const ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getAssigneeProjects",
+    outputs: [{ internalType: "bytes12[]", name: "", type: "bytes12[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       { internalType: "address", name: "_assigneeAddress", type: "address" },
     ],
@@ -223,9 +230,21 @@ export const ABI = [
     type: "function",
   },
   {
-    inputs: [
-      { internalType: "address", name: "_assigneeAddress", type: "address" },
-    ],
+    inputs: [],
+    name: "getClientProjects",
+    outputs: [{ internalType: "bytes12[]", name: "", type: "bytes12[]" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes12", name: "_id", type: "bytes12" }],
+    name: "getOfferedAssignee",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "getOffers",
     outputs: [{ internalType: "bytes12[]", name: "", type: "bytes12[]" }],
     stateMutability: "view",

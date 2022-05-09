@@ -69,11 +69,11 @@ export default function Navbar({connect,add}) {
                         Posted by me
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link className="dropdown-item" to="/myassignments">
                         Assigned to me
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 {/* <span className="nav-link active" onClick={() => setWallet(!wallet)}>{wallet === false ? "Account" : "0x000...000"}</span> */}

@@ -13,6 +13,7 @@ import { FaCheckCircle } from "react-icons/fa";
 const web3 = new Web3(window.ethereum);
 
 export default function MyProjectDetails({ add }) {
+  const { id } = useParams();
   const [modalOffer, setModalOffer] = useState(false);
   const [modalRevoke, setModalRevoke] = useState(false);
 
@@ -25,11 +26,20 @@ export default function MyProjectDetails({ add }) {
   };
   const [project, setProject] = useState(initialProjectState);
   const [dataHash, setDataHash] = useState();
+  const [offerData, setOfferData] = useState({
+    cost: "",
+    _id: "0x" + id,
+    assigneeWallet: "",
+    instructions: ""
+  });
 
   const getProject = (id) => {
     ProjectDataService.get(id)
       .then((response) => {
         setProject(response.data[0]);
+        setOfferData({cost:response.data[0].cost, _id: "0x" + id,
+        assigneeWallet: "",
+        instructions: ''})
         setDataHash(
           objectHash({
             title: response.data[0].title,
@@ -47,7 +57,7 @@ export default function MyProjectDetails({ add }) {
         console.log(err);
       });
   };
-  const { id } = useParams();
+  
 
   useEffect(async () => {
     getProject(id);
@@ -68,12 +78,8 @@ export default function MyProjectDetails({ add }) {
   const [failed, setFailed] = useState(false);
 
   // OFFER FORM
-  const [offerData, setOfferData] = useState({
-    cost: "",
-    _id: "0x"+id,
-    assigneeWallet: "",
-    instructions: ""
-  });
+  console.log(project.cost)
+  
   const { cost, _id, assigneeWallet, instructions } = offerData;
   function handleOfferChange(e) {
     const newData = { ...offerData };
@@ -252,75 +258,26 @@ export default function MyProjectDetails({ add }) {
           Delete Project
         </Button>
         <Modal show={showDel} onHide={handleDelClose}>
-        {/* <Modal.Header closeButton>
+          {/* <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header> */}
-        <Modal.Body className="text-light">Do you really wish to delete this project?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleDelClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleDelClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-        {/* REVOKE PROJECT */}
-        {/* <Modal
-          show={modalRevoke}
-          onHide={() => setModalRevoke(false)}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              Revoke Project
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group className="mb-3" controlId="formBasicWA">
-                <Form.Label>Wallet Address</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Wallet Address"
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicInstruction">
-                <Form.Label>Instructions</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Instructions for Service Provider"
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3 text-secondary" controlId="formBasicConfirm">
-                <Form.Check
-                  type="checkbox"
-                  label="I agree to revoke the rights of this project from assigned service provider"
-                  required
-                />
-              </Form.Group>
-              <Button variant="warning" type="submit">
-                Revoke
+          <Modal.Body className="text-danger fw-bold fs-5">
+            Do you really wish to delete this project?
+            <div className="d-flex justify-content-end mt-3">
+              <Button variant="warning" className="m-1" onClick={handleDelClose}>
+                Don't Delete
               </Button>
-            </Form>
+              <Button variant="danger" className="m-1" onClick={handleDelClose}>
+                Delete
+              </Button>
+            </div>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="warning" onClick={() => setModalRevoke(false)}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
+        </Modal>
 
         <div className="container my-5">
           <h4 className="text-light">Milestones:</h4>
           <span>(This will only be visible to parties contracting)</span>
-          <Checkpoints />
+          <Checkpoints milestones={project.checkpoints} rewards={project.rewards}/>
         </div>
       </div>
     </div>

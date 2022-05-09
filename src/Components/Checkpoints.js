@@ -1,22 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function Checkpoints() {
-  const data = [
-    {
-      title: "1 BNB",
-      cardTitle: "Milestone Description 1",
-    },
-    {
-      title: "4 BNB",
-      cardTitle: "Milestone Description 2",
-    },
-    {
-      title: "5 BNB",
-      cardTitle: "Milestone Description 3",
-    },
-  ];
+export default function Checkpoints({ milestones, rewards }) {
+  let arrData = { checkpoints: '', rewards: '' }
+  const [Data, setData] = useState([])
+
+  useEffect(() => {
+    let arr = []
+    if (milestones) {
+      for (let i = 0; i < milestones.length; i++) {
+        arr.push({checkpoints:milestones[i],rewards:rewards[i]})
+      }
+      setData(arr)
+    }
+  }, [milestones])
 
   const [paid, setPaid] = useState(false);
+  const renderMiles = (Data, index) => {
+    return(<tr key={index}>
+      <th scope="row">{index + 1}</th>
+      <td>{Data.checkpoints}</td>
+      <td>{Data.rewards}</td>
+      <td>
+        <button
+          className={
+            paid === false
+              ? "btn btn-outline-warning"
+              : "btn btn-success"
+          }
+          onClick={() => setPaid(!paid)}
+        >
+          {paid === false ? "Request Payment" : "Released"}
+        </button>
+      </td>
+    </tr>)
+  }
 
   return (
     <div className="my-4">
@@ -30,129 +47,7 @@ export default function Checkpoints() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Milestone 1</td>
-            <td>1 BNB</td>
-            {(() => {
-              if (window.location.pathname.includes("assign") === true) {
-                return (
-                  <td>
-                    <button
-                      className={
-                        paid === false
-                          ? "btn btn-outline-warning"
-                          : "btn btn-success"
-                      }
-                      onClick={() => setPaid(!paid)}
-                    >
-                      {paid === false ? "Request Payment" : "Released"}
-                    </button>
-                  </td>
-                );
-              } else if (
-                window.location.pathname.includes("myproject") === true
-              ) {
-                return (
-                  <td>
-                    <button
-                      className={
-                        paid === false
-                          ? "btn btn-outline-warning"
-                          : "btn btn-success"
-                      }
-                      onClick={() => setPaid(!paid)}
-                    >
-                      {paid === false ? "Release Payment" : "Released"}
-                    </button>
-                  </td>
-                );
-              } else {
-              }
-            })()}
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Milestone 2</td>
-            <td>3 BNB</td>
-            {(() => {
-              if (window.location.pathname.includes("assign") === true) {
-                return (
-                  <td>
-                    <button
-                      className={
-                        paid === false
-                          ? "btn btn-outline-warning"
-                          : "btn btn-success"
-                      }
-                      onClick={() => setPaid(!paid)}
-                    >
-                      {paid === false ? "Request Payment" : "Released"}
-                    </button>
-                  </td>
-                );
-              } else if (
-                window.location.pathname.includes("myproject") === true
-              ) {
-                return (
-                  <td>
-                    <button
-                      className={
-                        paid === false
-                          ? "btn btn-outline-warning"
-                          : "btn btn-success"
-                      }
-                      onClick={() => setPaid(!paid)}
-                    >
-                      {paid === false ? "Release Payment" : "Released"}
-                    </button>
-                  </td>
-                );
-              } else {
-              }
-            })()}
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Milestone 3</td>
-            <td>5 BNB</td>
-            {(() => {
-              if (window.location.pathname.includes("assign") === true) {
-                return (
-                  <td>
-                    <button
-                      className={
-                        paid === false
-                          ? "btn btn-outline-warning"
-                          : "btn btn-success"
-                      }
-                      onClick={() => setPaid(!paid)}
-                    >
-                      {paid === false ? "Request Payment" : "Released"}
-                    </button>
-                  </td>
-                );
-              } else if (
-                window.location.pathname.includes("myproject") === true
-              ) {
-                return (
-                  <td>
-                    <button
-                      className={
-                        paid === false
-                          ? "btn btn-outline-warning"
-                          : "btn btn-success"
-                      }
-                      onClick={() => setPaid(!paid)}
-                    >
-                      {paid === false ? "Release Payment" : "Released"}
-                    </button>
-                  </td>
-                );
-              } else {
-              }
-            })()}
-          </tr>
+          {Data.map(renderMiles)}
         </tbody>
       </table>
     </div>

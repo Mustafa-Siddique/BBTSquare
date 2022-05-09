@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import Checkpoints from "./Checkpoints";
-import DummyInterest from "./DummyInterest";
-import AssignedModal from "./Modal";
-import OfferModal from "./OfferModal";
-import ProjectDataService from "../services/projects";
-import { useParams } from "react-router-dom";
-import objectHash from "object-hash";
-import Moment from "react-moment";
-import { FaCheckCircle } from "react-icons/fa";
-import { verifyProject } from "../web3/Web3Client";
-// Moment.globalFormat = 'DD MMM YYYY';
+import React, { useEffect, useState } from "react"
+import { Button } from "react-bootstrap"
+import Checkpoints from "./Checkpoints"
+import DummyInterest from "./DummyInterest"
+import AssignedModal from "./Modal"
+import OfferModal from "./OfferModal"
+import ProjectDataService from "../services/projects"
+import { useParams } from "react-router-dom"
+import objectHash from "object-hash"
+import Moment from "react-moment"
+import { FaCheckCircle } from "react-icons/fa"
+import { acceptOffer, getAssignee, verifyProject } from "../web3/Web3Client"
+// Moment.globalFormat = 'DD MMM YYYY'
 
-export default function ProjectDetail(props) {
+export default function ProjectDetail({add}) {
   const initialProjectState = {
     id: null,
     title: "",
@@ -21,8 +21,9 @@ export default function ProjectDetail(props) {
     date: undefined,
   };
 
-  const [project, setProject] = useState(initialProjectState);
-  const [dataHash, setDataHash] = useState();
+  const [project, setProject] = useState(initialProjectState)
+  const [assignee, setAssignee] = useState("")
+  const [dataHash, setDataHash] = useState()
   const getProject = (id) => {
     ProjectDataService.get(id)
       .then((response) => {
@@ -49,6 +50,7 @@ export default function ProjectDetail(props) {
   useEffect(async () => {
     getProject(id);
     await verifyData(id);
+    await Assignee(id)
   }, [id]);
 
   const [blockchainData, setBlockchainData] = useState();
@@ -57,11 +59,26 @@ export default function ProjectDetail(props) {
     const blockchainData = await verifyProject("0x" + id);
     setBlockchainData(blockchainData);
   };
+  const Assignee = async() => {
+    const _assignee = await getAssignee("0x" + id);
+    setAssignee(_assignee)
+  }
 
   console.log("data", blockchainData, dataHash);
 
   const [modalShow, setModalShow] = useState(false);
   const [offer, setOffer] = useState(false);
+
+  // ACCEPT OFFER
+  const [acceptStat, setAcceptStat] = useState()
+  const accept = async() => {
+    const acceptData = await acceptOffer("0x" + id)
+    if (acceptData.status === true) {
+      setAcceptStat(true)
+    } else {
+      setAcceptStat(false)
+    }
+  }
 
   return (
     <div className="projectDetails py-5 px-3">
@@ -107,7 +124,10 @@ export default function ProjectDetail(props) {
             </tr>
             <tr>
               <th>Assigned to:</th>
-              <td>Unassigned</td>
+              <td>
+              {assignee && assignee !== "0x0000000000000000000000000000000000000000"
+                  ? assignee
+                  : "Unassigned"}</td>
             </tr>
             <tr>
               <th>About:</th>
@@ -125,9 +145,12 @@ export default function ProjectDetail(props) {
             </tr>
           </tbody>
         </table>
-        <Button variant="warning" onClick={() => setModalShow(true)}>
+        {console.log(assignee, add)}
+        {assignee && assignee.toUpperCase() === add.toUpperCase() ? <Button variant="warning" onClick={() => accept()}>
+          Accept Offer
+        </Button>: <Button variant="warning" onClick={() => setModalShow(true)}>
           Show Your Interest
-        </Button>
+        </Button>}
         <AssignedModal show={modalShow} onHide={() => setModalShow(false)} />
         <OfferModal show={offer} onHide={() => setModalShow(false)} />
         <div className="container mt-5">

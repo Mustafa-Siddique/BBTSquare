@@ -36,7 +36,7 @@ export const getContracts = (abi, address) => {
 
 export const getBBTContract = async() => {
     try {
-        const BBTContract = await  getContracts(ABI, "0xC39BE040Fe65b71070A306AAaFEb21d288AE4BE0")
+        const BBTContract = await  getContracts(ABI, "0xf61278cc4238a08c945a0085F578689494C50afc")
         console.log(BBTContract)
         return BBTContract
     } catch (error) {
@@ -62,6 +62,24 @@ export const verifyProject = async (_id) => {
     try {
         const BBTContract = await getBBTContract();
         const data = await BBTContract.methods.getProject(_id).call()
+        return data
+    } catch (err) {
+        console.log(err)
+    }
+}
+export const getAssignee = async (_id) => {
+    try {
+        const BBTContract = await getBBTContract();
+        const data = await BBTContract.methods.getOfferedAssignee(_id).call()
+        return data
+    } catch (err) {
+        console.log(err)
+    }
+}
+export const acceptOffer = async (_id) => {
+    try {
+        const BBTContract = await getBBTContract();
+        const data = await BBTContract.methods.acceptOffer(_id).send({from: await getAddress()})
         return data
     } catch (err) {
         console.log(err)
