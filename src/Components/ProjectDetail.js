@@ -129,7 +129,7 @@ export default function ProjectDetail({ add }) {
                   if (
                     blockchainData &&
                     blockchainData[1] !==
-                      "0x0000000000000000000000000000000000000000"
+                    "0x0000000000000000000000000000000000000000"
                   ) {
                     return blockchainData[1];
                   } else if (
@@ -160,25 +160,38 @@ export default function ProjectDetail({ add }) {
           </tbody>
         </table>
         {console.log(assignee, add)}
-        {assignee && assignee.toUpperCase() === add.toUpperCase() ? (
-          <Button variant="warning" onClick={() => accept()}>
+        {(() => {
+          if (
+            blockchainData &&
+            blockchainData[1] !==
+            "0x0000000000000000000000000000000000000000"
+          ) {
+            return (<Button variant="success" disabled onClick={() => accept()}>
+            In Progress
+          </Button>);
+          } else if (
+            assignee && assignee.toUpperCase() === add.toUpperCase()
+          ) {
+            return (<Button variant="warning" onClick={() => accept()}>
             Accept Offer
-          </Button>
-        ) : (
-          <Button variant="warning" onClick={() => setModalShow(true)}>
+          </Button>);
+          } else {
+            return (<Button variant="warning" onClick={() => setModalShow(true)}>
             Show Your Interest
-          </Button>
-        )}
+          </Button>);
+          }
+        })()}
         <AssignedModal show={modalShow} onHide={() => setModalShow(false)} />
         <OfferModal show={offer} onHide={() => setModalShow(false)} />
         {blockchainData &&
-        blockchainData[1] !== "0x0000000000000000000000000000000000000000" ? (
+          blockchainData[1] !== "0x0000000000000000000000000000000000000000" ? (
           <div className="container my-5">
             <h4 className="text-light">Milestones:</h4>
             <span>(This will only be visible to parties contracting)</span>
             <Checkpoints
               milestones={project.checkpoints}
               rewards={project.rewards}
+              stat={blockchainData}
             />
           </div>
         ) : (

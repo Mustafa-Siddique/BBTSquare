@@ -95,3 +95,21 @@ export const offerProject = async (cost, _id, wallet, instructions) => {
         console.log(error)
     }
 }
+export const milestone = async (_id, index) => {
+    try {
+        const BBTContract = await getBBTContract();
+        const data = await BBTContract.methods.checkpointCompleted(_id, index).send({from: await getAddress()});
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const revoke = async (_id) => {
+    try {
+        const BBTContract = await getBBTContract();
+        const data = await BBTContract.methods.revokeOffer(_id).send({from: await getAddress()});
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}

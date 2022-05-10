@@ -1,36 +1,53 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { milestone } from "../web3/Web3Client";
 
-export default function Checkpoints({ milestones, rewards }) {
-  let arrData = { checkpoints: '', rewards: '' }
+export default function Checkpoints({ milestones, rewards, stat }) {
+  let arrData = { checkpoints: '', rewards: '', stat: '' }
   const [Data, setData] = useState([])
+  const _id = useParams()
 
   useEffect(() => {
     let arr = []
-    if (milestones) {
+    if (stat) {
       for (let i = 0; i < milestones.length; i++) {
-        arr.push({checkpoints:milestones[i],rewards:rewards[i]})
+        arr.push({ checkpoints: milestones[i], rewards: rewards[i], stat: stat[4][i] })
       }
       setData(arr)
     }
-  }, [milestones])
+  }, [stat])
+
+  const checkpointRelease = async(e) => {
+    const releaseStat = await milestone("0x" + _id.id, e)
+    console.log(releaseStat)
+  }
 
   const [paid, setPaid] = useState(false);
   const renderMiles = (Data, index) => {
-    return(<tr key={index}>
+    return (<tr key={index}>
       <th scope="row">{index + 1}</th>
       <td>{Data.checkpoints}</td>
       <td>{Data.rewards}</td>
       <td>
-        <button
-          className={
-            paid === false
-              ? "btn btn-outline-warning"
-              : "btn btn-success"
+        {(() => {
+          if (window.location.pathname.includes("/myprojects/")) {
+            return(<button
+              className={
+                Data.stat === false
+                  ? "btn btn-outline-warning"
+                  : "btn btn-success"
+              }
+              onClick={() => checkpointRelease(index)}
+            >
+              {paid === false ? "Release Payment" : "Released"}
+            </button>)
+          } else {
+            return (
+              Data.stat === true ? 
+              "Released" : "Not Completed Yet"
+            )
           }
-          onClick={() => setPaid(!paid)}
-        >
-          {paid === false ? "Request Payment" : "Released"}
-        </button>
+        })()}
       </td>
     </tr>)
   }

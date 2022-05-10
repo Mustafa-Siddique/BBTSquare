@@ -7,9 +7,10 @@ import ProjectDataService from "../services/projects";
 import Moment from "react-moment";
 import Web3 from "web3";
 import objectHash from "object-hash";
-import { offerProject } from "../web3/Web3Client";
+import { offerProject, revoke } from "../web3/Web3Client";
 import { verifyProject } from "../web3/Web3Client";
 import { FaCheckCircle } from "react-icons/fa";
+import { BsFillExclamationTriangleFill, BsFillCloudCheckFill } from 'react-icons/bs'
 const web3 = new Web3(window.ethereum);
 
 export default function MyProjectDetails({ add }) {
@@ -37,9 +38,11 @@ export default function MyProjectDetails({ add }) {
     ProjectDataService.get(id)
       .then((response) => {
         setProject(response.data[0]);
-        setOfferData({cost:response.data[0].cost, _id: "0x" + id,
-        assigneeWallet: "",
-        instructions: ''})
+        setOfferData({
+          cost: response.data[0].cost, _id: "0x" + id,
+          assigneeWallet: "",
+          instructions: ''
+        })
         setDataHash(
           objectHash({
             title: response.data[0].title,
@@ -57,7 +60,7 @@ export default function MyProjectDetails({ add }) {
         console.log(err);
       });
   };
-  
+
 
   useEffect(async () => {
     getProject(id);
@@ -65,6 +68,7 @@ export default function MyProjectDetails({ add }) {
   }, [id]);
 
   const [blockchainData, setBlockchainData] = useState();
+  const [assignee, setAssignee] = useState("");
 
   const verifyData = async (id) => {
     const blockchainData = await verifyProject("0x" + id);
@@ -79,7 +83,7 @@ export default function MyProjectDetails({ add }) {
 
   // OFFER FORM
   console.log(project.cost)
-  
+
   const { cost, _id, assigneeWallet, instructions } = offerData;
   function handleOfferChange(e) {
     const newData = { ...offerData };
@@ -103,11 +107,14 @@ export default function MyProjectDetails({ add }) {
     }
   };
 
-  // DELETE PROJECT
+  // Revoke PROJECT
   const [showDel, setShowDel] = useState(false);
-
   const handleDelClose = () => setShowDel(false);
   const handleDelShow = () => setShowDel(true);
+  const revokeProject = async() => {
+    const revokeData = await revoke("0x" + id);
+    console.log(revokeData)
+  }
 
   return (
     <div className="MyProjectDetailContainer py-5 px-3">
@@ -153,7 +160,23 @@ export default function MyProjectDetails({ add }) {
             </tr>
             <tr>
               <th>Assigned to:</th>
-              <td>Undefined</td>
+              <td>
+                {(() => {
+                  if (
+                    blockchainData &&
+                    blockchainData[1] !==
+                    "0x0000000000000000000000000000000000000000"
+                  ) {
+                    return blockchainData[1];
+                  } else if (
+                    assignee &&
+                    assignee !== "0x0000000000000000000000000000000000000000"
+                  ) {
+                    return assignee;
+                  } else {
+                    return "Unassigned";
+                  }
+                })()}</td>
             </tr>
             <tr>
               <th>About:</th>
@@ -194,16 +217,6 @@ export default function MyProjectDetails({ add }) {
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={(e) => handleOfferSubmit(e)}>
-              <Form.Group className="mb-3" controlId="cost">
-                <Form.Label>Cost</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Project Total Cost"
-                  value={offerData.cost}
-                  onChange={(e) => handleOfferChange(e)}
-                  required
-                />
-              </Form.Group>
 
               <Form.Group className="mb-3" controlId="assigneeWallet">
                 <Form.Label>Wallet Address</Form.Label>
@@ -227,6 +240,20 @@ export default function MyProjectDetails({ add }) {
                 />
               </Form.Group>
 
+              {success && <div
+                className="alert alert-success d-flex align-items-center"
+                role="alert"
+              >
+                <BsFillCloudCheckFill size={24} />&nbsp;
+                <div>Offered successfully!</div>
+              </div>}
+              {failed && <div
+                className="alert alert-danger d-flex align-items-center"
+                role="alert"
+              >
+                <BsFillExclamationTriangleFill size={24} />&nbsp;
+                <div>Submission failed!</div>
+              </div>}
               <Button variant="warning" type="submit">
                 Send Offer
               </Button>
@@ -243,41 +270,41 @@ export default function MyProjectDetails({ add }) {
           variant="warning"
           className="ms-3"
           disabled={add !== undefined ? false : true}
-          onClick={() => setModalRevoke(true)}
+          onClick={handleDelShow}
         >
           Revoke
         </Button>
+        <Modal show={showDel} onHide={handleDelClose}>
+          {/* <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header> */}
+          <Modal.Body className="text-warning fs-5">
+            Do you really wish to revoke this project?
+            <div className="d-flex justify-content-end mt-3">
+              <Button variant="secondary" className="m-1" onClick={handleDelClose}>
+                Don't Revoke
+              </Button>
+              <Button variant="warning" className="m-1" onClick={() => revokeProject()}>
+                Revoke
+              </Button>
+            </div>
+          </Modal.Body>
+        </Modal>
 
         {/* DELETE PROJECT */}
-        <Button
+        {/* <Button
           variant="outline-danger"
           className="ms-3"
           disabled={add !== undefined ? false : true}
           onClick={handleDelShow}
         >
           Delete Project
-        </Button>
-        <Modal show={showDel} onHide={handleDelClose}>
-          {/* <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header> */}
-          <Modal.Body className="text-danger fw-bold fs-5">
-            Do you really wish to delete this project?
-            <div className="d-flex justify-content-end mt-3">
-              <Button variant="warning" className="m-1" onClick={handleDelClose}>
-                Don't Delete
-              </Button>
-              <Button variant="danger" className="m-1" onClick={handleDelClose}>
-                Delete
-              </Button>
-            </div>
-          </Modal.Body>
-        </Modal>
+        </Button> */}
 
         <div className="container my-5">
           <h4 className="text-light">Milestones:</h4>
           <span>(This will only be visible to parties contracting)</span>
-          <Checkpoints milestones={project.checkpoints} rewards={project.rewards}/>
+          <Checkpoints milestones={project.checkpoints} rewards={project.rewards} stat={blockchainData} />
         </div>
       </div>
     </div>
