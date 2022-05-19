@@ -64,7 +64,7 @@ export default function ProjectDetail({ add }) {
     setAssignee(_assignee);
   };
 
-  console.log("data", blockchainData, dataHash);
+  console.log("data", blockchainData, dataHash, assignee);
 
   const [modalShow, setModalShow] = useState(false);
   const [offer, setOffer] = useState(false);
@@ -148,6 +148,10 @@ export default function ProjectDetail({ add }) {
               <td>{project.about}</td>
             </tr>
             <tr>
+              <th>Contact:</th>
+              <td>{blockchainData && blockchainData[1].toUpperCase() === add.toUpperCase()? project.contact : "Confidential to assignee"}</td>
+            </tr>
+            <tr>
               <th>Posted On:</th>
               <td>
                 {blockchainData && blockchainData[5] !== undefined ? (
@@ -167,18 +171,18 @@ export default function ProjectDetail({ add }) {
             "0x0000000000000000000000000000000000000000"
           ) {
             return (<Button variant="success" disabled onClick={() => accept()}>
-            In Progress
-          </Button>);
+              In Progress
+            </Button>);
           } else if (
             assignee && assignee.toUpperCase() === add.toUpperCase()
           ) {
             return (<Button variant="warning" onClick={() => accept()}>
-            Accept Offer
-          </Button>);
+              Accept Offer
+            </Button>);
           } else {
             return (<Button variant="warning" onClick={() => setModalShow(true)}>
-            Show Your Interest
-          </Button>);
+              Show Your Interest
+            </Button>);
           }
         })()}
         <AssignedModal show={modalShow} onHide={() => setModalShow(false)} />

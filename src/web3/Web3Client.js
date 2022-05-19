@@ -76,6 +76,15 @@ export const getAssignee = async (_id) => {
         console.log(err)
     }
 }
+export const getAssigneeProjects = async (add) => {
+    try {
+        const BBTContract = await getBBTContract();
+        const data = await BBTContract.methods.getAssigneeProjects(add).call()
+        return data
+    } catch (err) {
+        console.log(err)
+    }
+}
 export const acceptOffer = async (_id) => {
     try {
         const BBTContract = await getBBTContract();
