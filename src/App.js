@@ -1,6 +1,4 @@
-import logo from './logo.svg';
 import './App.css';
-import Sidebar from './Components/Sidebar';
 import Navbar from './Components/Navbar';
 import AllProjects from './Components/AllProjects';
 import { Route, Routes } from 'react-router-dom';
@@ -17,39 +15,78 @@ import { useEffect, useState, useLayoutEffect } from 'react';
 
 function App() {
   const [address, setAddress] = useState()
-  useLayoutEffect(() => {
+  useLayoutEffect(async() => {
     connectMM()
+    switchEthereumChain()
+    // await window.ethereum.request({
+    //   method: "wallet_switchEthereumChain",
+    //   params: [{ chainId: "0x61" }]
+    // });
+
   }, [])
 
-  const connectMM = async() => {
-try{
-  // init();
-  await window.ethereum.enable();
-  const Address = await window.ethereum.selectedAddress
-  setAddress(Address)
-  console.log("address",Address)
-}
-catch(e){
-  console.log(e)
-}
+  const switchEthereumChain = async() => {
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x61' }],
+      });
+    } catch (e) {
+      if (e.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId: '0x61',
+                chainName: 'BSC Testnet',
+                nativeCurrency: {
+                  name: 'Binance',
+                  symbol: 'BNB', // 2-6 characters long
+                  decimals: 18
+                },
+                blockExplorerUrls: ['https://testnet.bscscan.com'],
+                rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+              },
+            ],
+          });
+        } catch (addError) {
+          console.error(addError);
+        }
+      }
+      // console.error(e)
+    }
   }
-  
+
+  const connectMM = async () => {
+    try {
+      // init();
+      await window.ethereum.enable();
+      const Address = await window.ethereum.selectedAddress
+      setAddress(Address)
+      console.log("address", Address)
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
     <div className="App">
-      <Navbar connect={connectMM} add={address}/>
-      <Bottomnav/>
-        <div className='globalContainer'>
-      <Routes>
-          <Route path='/' element={<AllProjects/>}/>
-          <Route path='/register' element={<Register/>}/>
-          <Route path='/myassignments' element={<Assigned add={address}/>}/>
-          <Route path='/myassignments/assigned' element={<AssignedProject/>}/>
-          <Route path='/createpost' element={<PostNew add={address}/>}/>
-          <Route path='/myprojects' element={<Posted add={address}/>}/>
-          <Route path='/myprojects/:id' element={<MyProjectDetails add={address}/>}/>
-          <Route path='/project/:id' element={<ProjectDetail add={address}/>}/>
-      </Routes>
-        </div>
+      <Navbar connect={connectMM} add={address} />
+      <Bottomnav />
+      <div className='globalContainer'>
+        <Routes>
+          <Route path='/' element={<AllProjects />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/myassignments' element={<Assigned add={address} />} />
+          <Route path='/myassignments/assigned' element={<AssignedProject />} />
+          <Route path='/createpost' element={<PostNew add={address} />} />
+          <Route path='/myprojects' element={<Posted add={address} />} />
+          <Route path='/myprojects/:id' element={<MyProjectDetails add={address} />} />
+          <Route path='/project/:id' element={<ProjectDetail add={address} />} />
+        </Routes>
+      </div>
     </div>
   );
 }

@@ -5,14 +5,13 @@ import ProjectDataService from "../services/projects";
 
 export default function Assigned({ add }) {
 
-  const [assignee, setAssignee] = useState([])
+  const [assignee, setAssignee] = useState(undefined)
   const [projects, setProjects] = useState([])
+  const [filtered, setFiltered] = useState([])
 
-  useEffect(async() => {
-    // _assigneeProjects();
-    // retrieveProjects();
+  useEffect(async () => {
     let _assignee = await getAssigneeProjects(add);
-    setAssignee(_assignee)
+    setAssignee(_assignee);
 
     ProjectDataService.getAll()
       .then(response => {
@@ -22,40 +21,32 @@ export default function Assigned({ add }) {
       .catch(err => {
         console.log(err);
       });
+
+    if (assignee) {
+      // Looping the array of assignee  project IDs
+      for (let index = 0; index < assignee.length; index++) {
+
+        // Looping the array of All Projects
+        for (let i = 0; i < projects.length; i++) {
+          if (assignee[index].slice(2) === projects[i]._id) {
+            filtered[index] = projects[i]
+          }
+        }
+      }
+    }
   }, [add])
+  console.log(assignee);
 
-  // FETCH ASSIGNED PROJECT IDs
-  // const _assigneeProjects = async () => {
-  //   console.log("Address: " + add)
-  //   let _assignee = await getAssigneeProjects(add);
-  //   setAssignee(_assignee)
-  // }
-  // console.log(assignee)
-  // const retrieveProjects = () => {
-  //   ProjectDataService.getAll()
-  //     .then(response => {
-  //       setProjects(response.data);
-  //       // console.log(projects)
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // }
-
-  const filterProject = () => {
-
-  }
-
-  const renderProjects = (projects, index) => {
+  const renderProjects = (filtered, index) => {
     return (
       <div className="col-md-6 my-2" key={index}>
         <div className="card" style={{ minWidth: "18rem", borderRadius: "5px" }}>
           <div className="card-body">
-            <h5 className="card-title" style={{ maxWidth: "calc(100% - 100px)" }}>{projects.name}</h5>
-            <h5 style={{ position: "absolute", right: "25px", top: "15px" }}>{projects.cost} BNB</h5>
-            <h6 className="card-subtitle mb-2 text-light">Posted by: {projects.wallet ? projects.wallet.slice(0, 10) + "..." + projects.wallet.slice(-8) : ""}</h6>
-            <p className="card-text">{projects.summary}</p>
-            <Link to={{ pathname: `/project/${projects._id.$oid.toString()}`, state: { id: projects._id.$oid.toString() } }} className="btnYellow">Details</Link>
+            <h5 className="card-title" style={{ maxWidth: "calc(100% - 100px)" }}>{filtered.title}</h5>
+            <h5 style={{ position: "absolute", right: "25px", top: "15px" }}>{filtered.cost} BNB</h5>
+            <h6 className="card-subtitle mb-2 text-light">Posted by: {filtered.wallet ? filtered.wallet.slice(0, 10) + "..." + filtered.wallet.slice(-8) : ""}</h6>
+            <p className="card-text">{filtered.summary}</p>
+            <Link to={{ pathname: `/project/${filtered._id.toString()}`, state: { id: filtered._id.toString() } }} className="btnYellow">Details</Link>
             {/* <Link to="/" className="btnYellow ms-3">Accept Offer</Link> */}
           </div>
         </div>
@@ -70,7 +61,7 @@ export default function Assigned({ add }) {
         <h3 className='mt-5'>No data available to show</h3>
         :
         <div className="row my-5">
-          {projects.map(renderProjects)}
+          {filtered.map(renderProjects)}
         </div>
       }
     </div>

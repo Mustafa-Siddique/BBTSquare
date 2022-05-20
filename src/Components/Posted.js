@@ -47,8 +47,8 @@ export default function Posted({ add }) {
             <p className="card-text">{projects.summary}</p>
             <Link
               to={{
-                pathname: `/myprojects/${projects._id.$oid.toString()}`,
-                state: { id: projects._id.$oid.toString() },
+                pathname: `/myprojects/${projects._id.toString()}`,
+                state: { id: projects._id.toString() },
               }}
               className="btnYellow"
             >
@@ -63,7 +63,10 @@ export default function Posted({ add }) {
   return (
     <div className="postedContainer py-5 px-3">
       <h2>Posted by me</h2>
-      <div className="row my-5">{projects.map(renderProjects)}</div>
+      {/* <h3 className='mt-5'>You haven't posted anything yet.</h3> */}
+      <div className="row my-5">
+        {projects.map(renderProjects)}
+      </div>
     </div>
   );
 }

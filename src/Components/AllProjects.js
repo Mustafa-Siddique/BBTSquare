@@ -33,7 +33,7 @@ export default function AllProjects() {
           <h5 style={{position:"absolute", right:"25px", top:"15px"}}>{projects.cost} BNB</h5>
           <h6 className="card-subtitle mb-2 text-light">Posted by: {projects.wallet}</h6>
           <p className="card-text">{projects.summary}</p>
-          <Link to={{pathname: `/project/${projects._id.$oid.toString()}`, state:{id:projects._id.$oid.toString()}}} className="btnYellow">Details</Link>
+          <Link to={{pathname: `/project/${projects._id.toString()}`, state:{id:projects._id.toString()}}} className="btnYellow">Details</Link>
         </div>
       </div>
     </div>
