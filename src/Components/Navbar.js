@@ -4,11 +4,8 @@ import logo from "../assets/images/logo.png";
 import { getAddress, init } from "../web3/Web3Client";
 import Sidebar from "./Sidebar";
 
-export default function Navbar({connect,add}) {
+export default function Navbar({ connect, add }) {
   const [lg, setlg] = useState(false);
-
-
-  
 
   return (
     <>
@@ -40,8 +37,8 @@ export default function Navbar({connect,add}) {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active" to="/register">
-                  Register Yourself
+                <Link className="nav-link active" to="/myassignments">
+                  Assigned to Me
                 </Link>
               </li>
               <li className="nav-item">
@@ -53,7 +50,7 @@ export default function Navbar({connect,add}) {
               <li className="nav-item">
                 <div className="btn-group">
                   <button type="button" className="btn btn-outline-warning" onClick={() => connect()}>
-                    {add ? `${add.slice(0,6)+ "..." + add.slice(-4)}` : "Account"}
+                    {add ? `${add.slice(0, 6) + "..." + add.slice(-4)}` : "Connect"}
                   </button>
                   <button
                     type="button"
@@ -69,11 +66,11 @@ export default function Navbar({connect,add}) {
                         Posted by me
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link className="dropdown-item" to="/myassignments">
                         Assigned to me
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 {/* <span className="nav-link active" onClick={() => setWallet(!wallet)}>{wallet === false ? "Account" : "0x000...000"}</span> */}

@@ -64,11 +64,11 @@ export default function AssignedModal(props) {
                 placeholder="Your Name (as Registered on BoobyTrap)"
                 required
               />
-              <Form.Text className="text-muted">
+              {/* <Form.Text className="text-muted">
                 <Link style={{ color: "#ffcc00" }} to="/register">
                   Register Yourself
                 </Link>
-              </Form.Text>
+              </Form.Text> */}
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="experience">

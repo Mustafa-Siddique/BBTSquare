@@ -70,7 +70,7 @@ function App() {
   return (
     <div className="App">
       <Navbar connect={connectMM} add={address} />
-      <Bottomnav />
+      <Bottomnav  connect={connectMM} add={address} />
       <div className='globalContainer'>
         <Routes>
           <Route path='/' element={<AllProjects />} />

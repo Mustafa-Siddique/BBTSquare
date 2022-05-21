@@ -5,7 +5,7 @@ import safedefi from "../assets/images/new.png";
 import stop from "../assets/images/user.png";
 import { Link } from "react-router-dom";
 
-export default function Bottomnav() {
+export default function Bottomnav({ connect, add }) {
   return (
     <div className="d-lg-none bottomNav container-fluid">
       <nav>
@@ -20,18 +20,18 @@ export default function Bottomnav() {
           <button className="btn">
             <Link id="mob-link" to="/register">
               <img
-                src={safedefi}
+                src={stop}
                 style={{ filter: "invert(1)", height: "32px" }}
                 alt=""
               />
               <br />
-              Register Yourself
+              Assigned to Me
             </Link>
           </button>
           <button className="btn">
             <Link id="mob-link" to="/createpost">
               <img
-                src={stop}
+                src={safedefi}
                 style={{ filter: "invert(1)", height: "32px" }}
                 alt=""
               />
@@ -40,10 +40,10 @@ export default function Bottomnav() {
             </Link>
           </button>
           <div className="btn-group dropup">
-            <button className="btn">
+            <button className="btn" onClick={() => connect()}>
               <img style={{ height: "38px" }} src={trapsheet} alt="" />
               <br />
-              Account
+              {add ? `${add.slice(0, 6) + "..."}` : "Connect"}
             </button>
             <button
               type="button"
@@ -59,11 +59,11 @@ export default function Bottomnav() {
                   Posted by me
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link className="dropdown-item" to="/assigned">
                   Assigned to me
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
           {/* <button className="btn">
