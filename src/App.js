@@ -18,11 +18,6 @@ function App() {
   useLayoutEffect(async() => {
     connectMM()
     switchEthereumChain()
-    // await window.ethereum.request({
-    //   method: "wallet_switchEthereumChain",
-    //   params: [{ chainId: "0x61" }]
-    // });
-
   }, [])
 
   const switchEthereumChain = async() => {
@@ -60,11 +55,12 @@ function App() {
 
   const connectMM = async () => {
     try {
-      // init();
-      await window.ethereum.enable();
-      const Address = await window.ethereum.selectedAddress
-      setAddress(Address)
-      console.log("address", Address)
+      const web3 = await init();
+      const walletAddress = await web3.eth.getAccounts()
+      // await window.ethereum.enable();
+      // const Address = await window.ethereum.selectedAddress
+      setAddress(walletAddress[0])
+      console.log("address", walletAddress)
     }
     catch (e) {
       console.log(e)

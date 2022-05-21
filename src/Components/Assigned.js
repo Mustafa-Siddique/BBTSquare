@@ -5,9 +5,9 @@ import ProjectDataService from "../services/projects";
 
 export default function Assigned({ add }) {
 
-  const [assignee, setAssignee] = useState(undefined)
-  const [projects, setProjects] = useState([])
-  const [filtered, setFiltered] = useState([])
+  const [assignee, setAssignee] = useState([])
+  const filtered = []
+  const [filtered2, setFiltered2] = useState([])
 
   useEffect(async () => {
     let _assignee = await getAssigneeProjects(add);
@@ -15,27 +15,30 @@ export default function Assigned({ add }) {
 
     ProjectDataService.getAll()
       .then(response => {
-        setProjects(response.data);
-        // console.log(projects)
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-    if (assignee) {
-      // Looping the array of assignee  project IDs
-      for (let index = 0; index < assignee.length; index++) {
-
-        // Looping the array of All Projects
-        for (let i = 0; i < projects.length; i++) {
-          if (assignee[index].slice(2) === projects[i]._id) {
-            filtered[index] = projects[i]
+        const prjct = response.data
+        console.log(prjct)
+        
+        if (add) {
+          // Looping the array of assignee  project IDs
+          for (let index = 0; index < _assignee.length; index++) {
+    
+            // Looping the array of All Projects
+            for (let i = 0; i < prjct.length; i++) {
+              // console.log("assignee",_assignee[0],_assignee)
+              if (_assignee[index].slice(2) == prjct[i]._id) {
+                filtered.push(prjct[i])
+                console.log("filtered",filtered);
+              }
+            }
           }
         }
-      }
-    }
+        setFiltered2(filtered)
+      })
+     
+
+    
   }, [add])
-  console.log(assignee);
+  
 
   const renderProjects = (filtered, index) => {
     return (
@@ -61,7 +64,7 @@ export default function Assigned({ add }) {
         <h3 className='mt-5'>No data available to show</h3>
         :
         <div className="row my-5">
-          {filtered.map(renderProjects)}
+          {filtered2.map(renderProjects)}
         </div>
       }
     </div>
